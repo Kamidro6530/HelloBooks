@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/books_24.xml" value="0.533" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/bookshelf.xml" value="0.204" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/home_24.xml" value="0.533" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/ic_launcher_background.xml" value="0.5635" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/list-check_24.xml" value="0.533" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/listcheck_24.xml" value="0.5635" />
+        <entry key="..\:/Programowanie/HelloBooks/app/src/main/res/drawable/search_24.xml" value="0.533" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
