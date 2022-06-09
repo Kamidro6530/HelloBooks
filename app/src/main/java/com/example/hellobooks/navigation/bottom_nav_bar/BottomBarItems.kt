@@ -8,10 +8,12 @@ import com.example.hellobooks.R
 
 sealed class BottomBarItems(
     var route: String,
-    val icon: ImageVector,
+    val icon: Int,
 
     ) {
-    object BookShelfScreen : BottomBarItems("bookShelfScreen",R.drawable.bookshelf as ImageVector)
-    object FindBookScreen : BottomBarItems("findBookScreen",Icons.Filled.Search)
-    object WishListScreen : BottomBarItems("bookShelfScreen",R.drawable.bookshelf as ImageVector)
+    object BookShelfScreen : BottomBarItems("bookShelfScreen",R.drawable.books_24)
+    object FindBookScreen : BottomBarItems("findBookScreen",R.drawable.search_24)
+    object WishListScreen : BottomBarItems("bookShelfScreen",R.drawable.listcheck_24)
+    object AddNewBookScreen : BottomBarItems("addNewBookScreen",R.drawable.add_24)
+    object StatisticsScreen : BottomBarItems("statisticsScreen",R.drawable.charthistogram_24)
 }
