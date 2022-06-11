@@ -6,7 +6,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.hellobooks.R
 
-sealed class BottomBarItems(
+open class BottomBarItems(
     var route: String,
     val icon: Int,
 
@@ -17,3 +17,5 @@ sealed class BottomBarItems(
     object AddNewBookScreen : BottomBarItems("addNewBookScreen",R.drawable.add_24)
     object StatisticsScreen : BottomBarItems("statisticsScreen",R.drawable.charthistogram_24)
 }
+
+
