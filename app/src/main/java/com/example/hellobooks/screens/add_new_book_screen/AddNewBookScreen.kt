@@ -10,6 +10,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
@@ -26,11 +28,13 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.hellobooks.R
+import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.ui.theme.*
 
 @Composable
-fun AddNewBookScreen() {
+fun AddNewBookScreen(navController: NavController) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -142,7 +146,7 @@ fun AddNewBookScreen() {
                                 .padding(horizontal = 8.dp),
                             label = {
                                 Text(
-                                    text = "Data wydania",
+                                    text = "Data wydania (rrrr-mm-dd)",
                                     fontFamily = roboto_fonts,
                                     fontWeight = FontWeight.Light,
                                     color = primary
@@ -452,7 +456,6 @@ fun AddNewBookScreen() {
 
                         val context = LocalContext.current
                         val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-
                         val launcher =
                             rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
                                 imageUri = uri
@@ -515,7 +518,7 @@ fun AddNewBookScreen() {
         }
         //Create new book button
         Row(modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 15.dp, bottom = 15.dp)) {
-            Button(onClick = { /*TODO*/ }, modifier = Modifier
+            Button(onClick = { navController.navigate(Routes.BookShelfScreen.route) }, modifier = Modifier
                 .width(300.dp)
                 .wrapContentHeight(), shape = RoundedCornerShape(5.dp),colors = ButtonDefaults.buttonColors(containerColor = tertiary), ) {
                 Text(text = "Dodaj książke ", modifier = Modifier.padding(10.dp),color = primary, fontSize = 16.sp,fontFamily = roboto_fonts,fontWeight = FontWeight.Bold)
