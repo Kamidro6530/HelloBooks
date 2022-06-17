@@ -23,12 +23,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.hellobooks.R
-import com.example.hellobooks.ui.theme.background
-import com.example.hellobooks.ui.theme.darkgreybackground
-import com.example.hellobooks.ui.theme.primary
-import com.example.hellobooks.ui.theme.roboto_fonts
+import com.example.hellobooks.ui.theme.*
 
 @Composable
 fun AddNewBookScreen() {
@@ -50,7 +49,7 @@ fun AddNewBookScreen() {
                 text = "Dodaj nową książkę",
                 fontFamily = roboto_fonts,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = primary
             )
         }
 
@@ -431,11 +430,9 @@ fun AddNewBookScreen() {
         Row(
             Modifier
                 .wrapContentHeight()
-                .padding(horizontal = 30.dp, vertical = 15.dp)
+                .padding(horizontal = 30.dp, vertical = 25.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-
-
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
@@ -443,7 +440,10 @@ fun AddNewBookScreen() {
                     .background(background),
 
                 ) {
-                Column(Modifier.align(Alignment.Center).padding(10.dp)) {
+                Column(
+                    Modifier
+                        .align(Alignment.Center)
+                        .padding(10.dp)) {
 
                     Row() {
 
@@ -510,6 +510,15 @@ fun AddNewBookScreen() {
 
                 }
 
+
+            }
+        }
+        //Create new book button
+        Row(modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 15.dp, bottom = 15.dp)) {
+            Button(onClick = { /*TODO*/ }, modifier = Modifier
+                .width(300.dp)
+                .wrapContentHeight(), shape = RoundedCornerShape(5.dp),colors = ButtonDefaults.buttonColors(containerColor = tertiary), ) {
+                Text(text = "Dodaj książke ", modifier = Modifier.padding(10.dp),color = primary, fontSize = 16.sp,fontFamily = roboto_fonts,fontWeight = FontWeight.Bold)
 
             }
         }
