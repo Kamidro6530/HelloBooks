@@ -14,7 +14,7 @@ class BookRepository(var bookDao: BookDao)  {
         bookDao.deleteBook(book)
     }
 
-     fun getAllBooksFromDatabase() : Deferred<List<Book>> =
+     fun getAllBooks() : Deferred<List<Book>> =
         CoroutineScope(Dispatchers.IO).async {
             bookDao.getAllBooks()
         }

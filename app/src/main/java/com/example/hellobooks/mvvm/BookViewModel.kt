@@ -18,7 +18,7 @@ class BookViewModel( val bookRepository: BookRepository) : ViewModel() {
 
     init {
         viewModelScope.launch {
-            listOfBooks.value = bookRepository.bookDao.getAllBooks()
+            listOfBooks.value = bookRepository.getAllBooks().await()
 
         }
     }
