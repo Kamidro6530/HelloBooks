@@ -1,20 +1,25 @@
 package com.example.hellobooks.screens
 
-import androidx.compose.foundation.background
+import android.graphics.Bitmap
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.os.Build
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
@@ -28,13 +33,19 @@ import com.example.hellobooks.ui.theme.roboto_fonts
 @Composable
 fun AddNewBookScreen() {
     val scrollState = rememberScrollState()
-    Column(modifier = Modifier.fillMaxSize().verticalScroll(scrollState)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+    ) {
+
 
         //Title row
         Row(
             Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(10.dp)) {
+                .padding(10.dp)
+        ) {
             Text(
                 text = "Dodaj nową książkę",
                 fontFamily = roboto_fonts,
@@ -42,6 +53,8 @@ fun AddNewBookScreen() {
                 color = MaterialTheme.colorScheme.primary
             )
         }
+
+
         //Book details row
         Row(
             modifier = Modifier
@@ -53,11 +66,10 @@ fun AddNewBookScreen() {
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .width(500.dp)
-                    .background(background)
-                   ,
+                    .background(background),
             ) {
-                Column() {
-                    Row() {
+                Column {
+                    Row {
                         var title by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = title,
@@ -68,19 +80,27 @@ fun AddNewBookScreen() {
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                                 .padding(horizontal = 8.dp),
-                            label = { Text(text = "Tytuł",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
+                            label = {
+                                Text(
+                                    text = "Tytuł",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
 
                             maxLines = 1
                         )
 
                     }
 
-                    Row() {
+                    Row {
                         var author by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = author,
@@ -91,18 +111,26 @@ fun AddNewBookScreen() {
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                                 .padding(horizontal = 8.dp),
-                            label = { Text(text = "Autor / Autorzy",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
+                            label = {
+                                Text(
+                                    text = "Autor / Autorzy",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
 
                             maxLines = 1
                         )
 
                     }
-                    Row() {
+                    Row {
                         var publicationDate by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = publicationDate,
@@ -113,18 +141,26 @@ fun AddNewBookScreen() {
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                                 .padding(horizontal = 8.dp),
-                            label = { Text(text = "Data wydania",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
+                            label = {
+                                Text(
+                                    text = "Data wydania",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
 
                             maxLines = 1
                         )
 
                     }
-                    Row() {
+                    Row {
                         var categories by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = categories,
@@ -135,18 +171,26 @@ fun AddNewBookScreen() {
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                                 .padding(horizontal = 8.dp),
-                            label = { Text(text = "Kategorie",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
+                            label = {
+                                Text(
+                                    text = "Kategorie",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
 
                             maxLines = 1
                         )
 
                     }
-                    Row() {
+                    Row {
                         var isbn by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = isbn,
@@ -157,18 +201,26 @@ fun AddNewBookScreen() {
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
                                 .padding(horizontal = 8.dp),
-                            label = { Text(text = "ISBN",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
+                            label = {
+                                Text(
+                                    text = "ISBN",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
 
                             maxLines = 1
                         )
 
                     }
-                    Row() {
+                    Row {
                         var description by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = description,
@@ -178,14 +230,21 @@ fun AddNewBookScreen() {
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp)
-                                ,
-                            label = { Text(text = "Opis",fontFamily = roboto_fonts,fontWeight = FontWeight.Thin,color = primary) },
+                                .padding(horizontal = 8.dp),
+                            label = {
+                                Text(
+                                    text = "Opis",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Thin,
+                                    color = primary
+                                )
+                            },
                             shape = RoundedCornerShape(8.dp),
                             colors = TextFieldDefaults.textFieldColors(
                                 containerColor = background,
                                 focusedIndicatorColor = background, //hide the indicator
-                                unfocusedIndicatorColor = background, textColor = primary),
+                                unfocusedIndicatorColor = background, textColor = primary
+                            ),
                         )
 
 
@@ -198,126 +257,264 @@ fun AddNewBookScreen() {
             }
 
         }
+
+
         //Show other options button
-        Row(modifier = Modifier.align(Alignment.End).padding(horizontal = 30.dp).wrapContentHeight()) {
-            Button(onClick = { /*TODO*/ }, colors = ButtonDefaults.buttonColors(containerColor = background), shape = RoundedCornerShape(6.dp), contentPadding = PaddingValues(4.dp)) {
-                Icon(Icons.Filled.Add,"Other options", tint = primary)
+
+        var showOtherOptions by remember { mutableStateOf(false) }
+
+        Row(
+            modifier = Modifier
+                .align(Alignment.End)
+                .padding(horizontal = 30.dp)
+                .wrapContentHeight()
+        ) {
+            Button(
+                onClick = { showOtherOptions = showOtherOptions.not() },
+                colors = ButtonDefaults.buttonColors(containerColor = background),
+                shape = RoundedCornerShape(6.dp),
+                contentPadding = PaddingValues(4.dp)
+            ) {
+                Icon(Icons.Filled.Add, "Other options", tint = primary)
 
             }
         }
 
+
         //Other details Row
+        if (showOtherOptions == true) {
+            Row(
+                modifier = Modifier
+                    .wrapContentHeight()
+                    .padding(horizontal = 30.dp, vertical = 15.dp)
+
+
+            ) {
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(10.dp))
+                        .width(500.dp)
+                        .background(background),
+                ) {
+                    Column {
+                        Row {
+                            var publisher by remember { mutableStateOf(TextFieldValue("")) }
+                            TextField(
+                                value = publisher,
+                                onValueChange = {
+                                    publisher = it
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp)
+                                    .padding(horizontal = 8.dp),
+                                label = {
+                                    Text(
+                                        text = "Wydawca",
+                                        fontFamily = roboto_fonts,
+                                        fontWeight = FontWeight.Light,
+                                        color = primary
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = background,
+                                    focusedIndicatorColor = primary, //hide the indicator
+                                    unfocusedIndicatorColor = primary, textColor = primary
+                                ),
+
+                                maxLines = 1
+                            )
+
+                        }
+
+                        Row {
+                            var language by remember { mutableStateOf(TextFieldValue("")) }
+                            TextField(
+                                value = language,
+                                onValueChange = {
+                                    language = it
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp)
+                                    .padding(horizontal = 8.dp),
+                                label = {
+                                    Text(
+                                        text = "Język",
+                                        fontFamily = roboto_fonts,
+                                        fontWeight = FontWeight.Light,
+                                        color = primary
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = background,
+                                    focusedIndicatorColor = primary, //hide the indicator
+                                    unfocusedIndicatorColor = primary, textColor = primary
+                                ),
+
+                                maxLines = 1
+                            )
+
+                        }
+                        Row {
+                            var edition by remember { mutableStateOf(TextFieldValue("")) }
+                            TextField(
+                                value = edition,
+                                onValueChange = {
+                                    edition = it
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp)
+                                    .padding(horizontal = 8.dp),
+                                label = {
+                                    Text(
+                                        text = "Edycja/Wydanie",
+                                        fontFamily = roboto_fonts,
+                                        fontWeight = FontWeight.Light,
+                                        color = primary
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = background,
+                                    focusedIndicatorColor = primary, //hide the indicator
+                                    unfocusedIndicatorColor = primary, textColor = primary
+                                ),
+
+                                maxLines = 1
+                            )
+
+                        }
+                        Row {
+                            var subtitle by remember { mutableStateOf(TextFieldValue("")) }
+                            TextField(
+                                value = subtitle,
+                                onValueChange = {
+                                    subtitle = it
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 10.dp)
+                                    .padding(horizontal = 8.dp),
+                                label = {
+                                    Text(
+                                        text = "Podtytuł",
+                                        fontFamily = roboto_fonts,
+                                        fontWeight = FontWeight.Light,
+                                        color = primary
+                                    )
+                                },
+                                shape = RoundedCornerShape(8.dp),
+                                colors = TextFieldDefaults.textFieldColors(
+                                    containerColor = background,
+                                    focusedIndicatorColor = primary, //hide the indicator
+                                    unfocusedIndicatorColor = primary, textColor = primary
+                                ),
+
+                                maxLines = 1
+                            )
+
+                        }
+
+
+                    }
+
+
+                }
+
+            }
+        }
+        //Image Picker row
         Row(
-            modifier = Modifier
+            Modifier
                 .wrapContentHeight()
                 .padding(horizontal = 30.dp, vertical = 15.dp)
-
+                .align(Alignment.CenterHorizontally)
         ) {
+
+
             Box(
                 modifier = Modifier
                     .clip(RoundedCornerShape(10.dp))
                     .width(500.dp)
-                    .background(background)
-                ,
-            ) {
-                Column() {
-                    Row() {
-                        var publisher by remember { mutableStateOf(TextFieldValue("")) }
-                        TextField(
-                            value = publisher,
-                            onValueChange = {
-                                publisher = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = { Text(text = "Wydawca",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
+                    .background(background),
 
-                            maxLines = 1
-                        )
-
-                    }
+                ) {
+                Column(Modifier.align(Alignment.Center).padding(10.dp)) {
 
                     Row() {
-                        var language by remember { mutableStateOf(TextFieldValue("")) }
-                        TextField(
-                            value = language,
-                            onValueChange = {
-                                language = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = { Text(text = "Język",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
 
-                            maxLines = 1
-                        )
+                        //Adress uri for image
+                        var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+                        val context = LocalContext.current
+                        val bitmap = remember { mutableStateOf<Bitmap?>(null) }
+
+                        val launcher =
+                            rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
+                                imageUri = uri
+                            }
+
+                        imageUri?.let {
+                            if (Build.VERSION.SDK_INT < 28) {
+                                bitmap.value = MediaStore.Images
+                                    .Media.getBitmap(context.contentResolver, it)
+
+                            } else {
+                                val source = ImageDecoder
+                                    .createSource(context.contentResolver, it)
+                                bitmap.value = ImageDecoder.decodeBitmap(source)
+                            }
+
+
+                        }
+
+                        Button(
+                            onClick = { launcher.launch("image/") },
+                            colors = ButtonDefaults.outlinedButtonColors(containerColor = background, contentColor = darkgreybackground),
+                            modifier = Modifier
+                                .size(height = 200.dp, width = 150.dp),
+
+                            shape = RectangleShape,
+                            border = BorderStroke(
+                                2.dp,
+                                darkgreybackground
+                            )
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .background(background)
+                            ) {
+                                if (bitmap.value == null)
+                                    Image(painterResource(id = R.drawable.picture_24), "Pick image")
+                                else {
+
+                                    bitmap.value?.let { btm ->
+                                        Image(
+                                            bitmap = btm.asImageBitmap(),
+                                            contentDescription = null,
+                                            modifier = Modifier.size(height = 200.dp, width = 150.dp)
+                                        )
+                                    }
+
+                                }
+
+                            }
+                        }
 
                     }
-                    Row() {
-                        var edition by remember { mutableStateOf(TextFieldValue("")) }
-                        TextField(
-                            value = edition,
-                            onValueChange = {
-                                edition = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = { Text(text = "Edycja/Wydanie",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
-
-                            maxLines = 1
-                        )
-
-                    }
-                    Row() {
-                        var subtitle by remember { mutableStateOf(TextFieldValue("")) }
-                        TextField(
-                            value = subtitle,
-                            onValueChange = {
-                                subtitle = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = { Text(text = "Podtytuł",fontFamily = roboto_fonts,fontWeight = FontWeight.Light,color = primary) },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary),
-
-                            maxLines = 1
-                        )
-
-                    }
-
 
 
                 }
 
 
             }
-
         }
+
     }
+
+
 }
