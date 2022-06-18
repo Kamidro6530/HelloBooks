@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
@@ -159,6 +160,36 @@ fun AddNewBookScreen(navController: NavController) {
                                 unfocusedIndicatorColor = primary, textColor = primary
                             ),
 
+                            maxLines = 1
+                        )
+
+                    }
+                    Row {
+                        var pages by remember { mutableStateOf(TextFieldValue("")) }
+                        TextField(
+                            value = pages,
+                            onValueChange = {
+                                pages = it
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 10.dp)
+                                .padding(horizontal = 8.dp),
+                            label = {
+                                Text(
+                                    text = "Liczba stron",
+                                    fontFamily = roboto_fonts,
+                                    fontWeight = FontWeight.Light,
+                                    color = primary
+                                )
+                            },
+                            shape = RoundedCornerShape(8.dp),
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = background,
+                                focusedIndicatorColor = primary, //hide the indicator
+                                unfocusedIndicatorColor = primary, textColor = primary
+                            ),
+                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                             maxLines = 1
                         )
 

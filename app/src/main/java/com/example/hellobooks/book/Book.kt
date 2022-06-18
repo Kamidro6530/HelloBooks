@@ -12,6 +12,7 @@ data class Book(
     @ColumnInfo(name = "author") val author : String = "",
     @ColumnInfo(name = "publication_date") val publicationDate : String = "",
     @ColumnInfo(name = "categories") val categories : String = "",
+    @ColumnInfo(name = "pages") val pages : Int = 0,
     @ColumnInfo(name = "isbn") val isbn : String = "",
     @ColumnInfo(name = "description") val description : String = "",
     //Other options
