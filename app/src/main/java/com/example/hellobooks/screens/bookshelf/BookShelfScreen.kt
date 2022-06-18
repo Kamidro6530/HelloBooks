@@ -36,8 +36,11 @@ fun BookShelfScreen() {
                 ) {
                     Box(
                         Modifier
-                            .background(color = darkgreybackground, shape = RoundedCornerShape(10.dp))
-                            .size(height = 160.dp, width = 120.dp),
+                            .background(
+                                color = darkgreybackground,
+                                shape = RoundedCornerShape(10.dp)
+                            )
+                            .size(height = 180.dp, width = 130.dp),
                             contentAlignment = Alignment.Center
                     ) {
                         Image(
@@ -59,33 +62,36 @@ fun BookShelfScreen() {
                                 text = "Title", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Black,
                                 color = primary,
-                                modifier = Modifier.padding(start = 70.dp, top = 5.dp, bottom = 10.dp),
+                                modifier = Modifier.padding(start = 90.dp),
                                 fontSize = 22.sp
                             )
                         }
-                        Row() {
+                        Row(Modifier.padding(top = 10.dp, bottom = 10.dp, start = 15.dp)) {
+                            Image(painter = painterResource(id = R.drawable.user_24), contentDescription = null,Modifier.size(20.dp) )
                             Text(
                                 text = "author", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(start = 15.dp, bottom = 5.dp, top = 5.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
                             )
                         }
 
-                        Row() {
+                        Row(Modifier.padding(top = 10.dp, bottom = 10.dp, start = 15.dp)) {
+                            Image(painter = painterResource(id = R.drawable.calendar_24), contentDescription = null,Modifier.size(20.dp) )
                             Text(
                                 text = "publication date", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(start = 15.dp, bottom = 5.dp, top = 5.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
                             )
                         }
-                        Row() {
+                        Row(Modifier.padding(top = 10.dp, start = 15.dp)) {
+                            Image(painter = painterResource(id = R.drawable.document_24), contentDescription = null,Modifier.size(20.dp) )
                             Text(
                                 text = "pages", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(start = 15.dp, bottom = 5.dp, top = 5.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
                             )
                         }
                     }
