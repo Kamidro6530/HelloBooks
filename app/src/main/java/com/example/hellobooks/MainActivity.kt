@@ -3,6 +3,7 @@ package com.example.hellobooks
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -12,7 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.hellobooks.book.Book
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Navigation
 import com.example.hellobooks.navigation.bottom_nav_bar.AppBottomNavigation
 import com.example.hellobooks.navigation.bottom_nav_bar.BottomBarItems
@@ -21,6 +22,7 @@ import com.example.hellobooks.ui.theme.HelloBooksTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
 
         setContent {
@@ -52,8 +54,7 @@ class MainActivity : ComponentActivity() {
                         content = {
                             Column(modifier = Modifier.padding(it)) {
                                 Navigation(
-                                    navController = navController, bottomBarVisibilityState = bottomBarVisibilityState
-                                )
+                                    navController = navController, bottomBarVisibilityState = bottomBarVisibilityState)
                             }
                         })
                 }

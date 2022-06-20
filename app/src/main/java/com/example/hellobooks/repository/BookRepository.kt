@@ -1,6 +1,6 @@
 package com.example.hellobooks.repository
 
-import com.example.hellobooks.book.Book
+import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.room.BookDao
 import kotlinx.coroutines.*
 

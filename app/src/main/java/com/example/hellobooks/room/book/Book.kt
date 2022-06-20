@@ -1,4 +1,4 @@
-package com.example.hellobooks.book
+package com.example.hellobooks.room.book
 
 import android.graphics.Bitmap
 import androidx.room.ColumnInfo

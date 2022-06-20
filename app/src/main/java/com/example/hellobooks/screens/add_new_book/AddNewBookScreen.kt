@@ -10,7 +10,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -26,16 +25,22 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.hellobooks.R
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.*
 
+
+
 @Composable
-fun AddNewBookScreen(navController: NavController) {
+fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
+
+
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -548,10 +553,16 @@ fun AddNewBookScreen(navController: NavController) {
             }
         }
         //Create new book button
-        Row(modifier = Modifier.align(Alignment.CenterHorizontally).padding(top = 15.dp, bottom = 15.dp)) {
-            Button(onClick = { navController.navigate(Routes.BookShelfScreen.route) }, modifier = Modifier
-                .width(300.dp)
-                .wrapContentHeight(), shape = RoundedCornerShape(5.dp),colors = ButtonDefaults.buttonColors(containerColor = tertiary), ) {
+        Row(modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 15.dp, bottom = 15.dp)) {
+            Button(onClick = {
+               // bookViewModel.insertBook(Book(1, title = title))
+               // navController.navigate(Routes.BookShelfScreen.route)
+                             },
+                modifier = Modifier
+                    .width(300.dp)
+                    .wrapContentHeight(), shape = RoundedCornerShape(5.dp),colors = ButtonDefaults.buttonColors(containerColor = tertiary),){
                 Text(text = "Dodaj książke ", modifier = Modifier.padding(10.dp),color = primary, fontSize = 16.sp,fontFamily = roboto_fonts,fontWeight = FontWeight.Bold)
 
             }

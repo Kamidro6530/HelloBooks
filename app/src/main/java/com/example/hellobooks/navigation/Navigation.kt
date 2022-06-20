@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.screens.*
 
 @Composable
@@ -18,7 +19,7 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
         }
         composable(Routes.AddNewBookScreen.route){
             bottomBarVisibilityState.value = false
-            AddNewBookScreen(navController)
+            AddNewBookScreen()
         }
         composable(Routes.FindBookScreen.route){
             bottomBarVisibilityState.value = true
