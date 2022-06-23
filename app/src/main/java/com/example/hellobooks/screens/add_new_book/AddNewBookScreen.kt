@@ -27,19 +27,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hellobooks.R
 import com.example.hellobooks.mvvm.BookViewModel
-import com.example.hellobooks.navigation.Routes
-import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.*
-
+import dagger.hilt.android.AndroidEntryPoint
 
 
 @Composable
-fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
+fun AddNewBookScreen() {
 
+
+    val viewModel = hiltViewModel<BookViewModel>()
 
     val scrollState = rememberScrollState()
     Column(
@@ -483,7 +482,8 @@ fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
                 Column(
                     Modifier
                         .align(Alignment.Center)
-                        .padding(10.dp)) {
+                        .padding(10.dp)
+                ) {
 
                     Row() {
 
@@ -513,7 +513,10 @@ fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
 
                         Button(
                             onClick = { launcher.launch("image/") },
-                            colors = ButtonDefaults.outlinedButtonColors(containerColor = background, contentColor = darkgreybackground),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = background,
+                                contentColor = darkgreybackground
+                            ),
                             modifier = Modifier
                                 .size(height = 200.dp, width = 150.dp),
 
@@ -535,7 +538,10 @@ fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
                                         Image(
                                             bitmap = btm.asImageBitmap(),
                                             contentDescription = null,
-                                            modifier = Modifier.size(height = 200.dp, width = 150.dp)
+                                            modifier = Modifier.size(
+                                                height = 200.dp,
+                                                width = 150.dp
+                                            )
                                         )
                                     }
 
@@ -553,17 +559,30 @@ fun AddNewBookScreen(bookViewModel: BookViewModel = viewModel()) {
             }
         }
         //Create new book button
-        Row(modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 15.dp, bottom = 15.dp)) {
-            Button(onClick = {
-               // bookViewModel.insertBook(Book(1, title = title))
-               // navController.navigate(Routes.BookShelfScreen.route)
-                             },
+        Row(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(top = 15.dp, bottom = 15.dp)
+        ) {
+            Button(
+                onClick = {
+                    // bookViewModel.insertBook(Book(1, title = title))
+                    // navController.navigate(Routes.BookShelfScreen.route)
+                },
                 modifier = Modifier
                     .width(300.dp)
-                    .wrapContentHeight(), shape = RoundedCornerShape(5.dp),colors = ButtonDefaults.buttonColors(containerColor = tertiary),){
-                Text(text = "Dodaj książke ", modifier = Modifier.padding(10.dp),color = primary, fontSize = 16.sp,fontFamily = roboto_fonts,fontWeight = FontWeight.Bold)
+                    .wrapContentHeight(),
+                shape = RoundedCornerShape(5.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = tertiary),
+            ) {
+                Text(
+                    text = "Dodaj książke ",
+                    modifier = Modifier.padding(10.dp),
+                    color = primary,
+                    fontSize = 16.sp,
+                    fontFamily = roboto_fonts,
+                    fontWeight = FontWeight.Bold
+                )
 
             }
         }

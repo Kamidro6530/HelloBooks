@@ -3,14 +3,17 @@ package com.example.hellobooks.repository
 import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.room.BookDao
 import kotlinx.coroutines.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BookRepository(var bookDao: BookDao)  {
+@Singleton
+class BookRepository @Inject constructor(private val bookDao: BookDao) {
 
-    fun insertBook(book : Book){
+     fun insertBook(book : Book){
         bookDao.insertBook(book)
     }
 
-    fun deleteBook(book : Book){
+     fun deleteBook(book : Book){
         bookDao.deleteBook(book)
     }
 
