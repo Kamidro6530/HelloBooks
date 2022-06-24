@@ -19,7 +19,7 @@ object BookModule {
     @Singleton
     @Provides
     fun provideBookDatabase(@ApplicationContext appContext: Context): BookDatabase {
-        return Room.databaseBuilder(appContext, BookDatabase::class.java, "book_database").build()
+        return Room.databaseBuilder(appContext, BookDatabase::class.java, "book_database").fallbackToDestructiveMigration().build()
     }
 
     @Provides

@@ -1,10 +1,7 @@
 package com.example.hellobooks.screens
 
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
-import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -19,8 +16,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,17 +23,40 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.mvvm.BookViewModel
+import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.*
-import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 @Composable
-fun AddNewBookScreen() {
+fun AddNewBookScreen(navController : NavHostController) {
 
 
-    val viewModel = hiltViewModel<BookViewModel>()
+    val bookViewModel = hiltViewModel<BookViewModel>()
+
+    //Book parameters
+    var title by remember { mutableStateOf(TextFieldValue("")) }
+    var author by remember { mutableStateOf(TextFieldValue("")) }
+    var publicationDate by remember { mutableStateOf(TextFieldValue("")) }
+    var pages by remember { mutableStateOf(TextFieldValue("")) }
+    var categories by remember { mutableStateOf(TextFieldValue("")) }
+    var isbn by remember { mutableStateOf(TextFieldValue("")) }
+    var description by remember { mutableStateOf(TextFieldValue("")) }
+    //Other options
+    var publisher by remember { mutableStateOf(TextFieldValue("")) }
+    var language by remember { mutableStateOf(TextFieldValue("")) }
+    var edition by remember { mutableStateOf(TextFieldValue("")) }
+    var subtitle by remember { mutableStateOf(TextFieldValue("")) }
+    //Image
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
 
     val scrollState = rememberScrollState()
     Column(
@@ -78,7 +96,6 @@ fun AddNewBookScreen() {
             ) {
                 Column {
                     Row {
-                        var title by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = title,
                             onValueChange = {
@@ -109,7 +126,6 @@ fun AddNewBookScreen() {
                     }
 
                     Row {
-                        var author by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = author,
                             onValueChange = {
@@ -139,7 +155,6 @@ fun AddNewBookScreen() {
 
                     }
                     Row {
-                        var publicationDate by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = publicationDate,
                             onValueChange = {
@@ -169,7 +184,6 @@ fun AddNewBookScreen() {
 
                     }
                     Row {
-                        var pages by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = pages,
                             onValueChange = {
@@ -199,7 +213,6 @@ fun AddNewBookScreen() {
 
                     }
                     Row {
-                        var categories by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = categories,
                             onValueChange = {
@@ -229,7 +242,7 @@ fun AddNewBookScreen() {
 
                     }
                     Row {
-                        var isbn by remember { mutableStateOf(TextFieldValue("")) }
+
                         TextField(
                             value = isbn,
                             onValueChange = {
@@ -259,7 +272,6 @@ fun AddNewBookScreen() {
 
                     }
                     Row {
-                        var description by remember { mutableStateOf(TextFieldValue("")) }
                         TextField(
                             value = description,
                             onValueChange = {
@@ -336,7 +348,6 @@ fun AddNewBookScreen() {
                 ) {
                     Column {
                         Row {
-                            var publisher by remember { mutableStateOf(TextFieldValue("")) }
                             TextField(
                                 value = publisher,
                                 onValueChange = {
@@ -367,7 +378,6 @@ fun AddNewBookScreen() {
                         }
 
                         Row {
-                            var language by remember { mutableStateOf(TextFieldValue("")) }
                             TextField(
                                 value = language,
                                 onValueChange = {
@@ -397,7 +407,6 @@ fun AddNewBookScreen() {
 
                         }
                         Row {
-                            var edition by remember { mutableStateOf(TextFieldValue("")) }
                             TextField(
                                 value = edition,
                                 onValueChange = {
@@ -427,7 +436,6 @@ fun AddNewBookScreen() {
 
                         }
                         Row {
-                            var subtitle by remember { mutableStateOf(TextFieldValue("")) }
                             TextField(
                                 value = subtitle,
                                 onValueChange = {
@@ -487,32 +495,20 @@ fun AddNewBookScreen() {
 
                     Row() {
 
-                        //Adress uri for image
-                        var imageUri by remember { mutableStateOf<Uri?>(null) }
-
-                        val context = LocalContext.current
-                        val bitmap = remember { mutableStateOf<Bitmap?>(null) }
-                        val launcher =
-                            rememberLauncherForActivityResult(contract = ActivityResultContracts.GetContent()) { uri: Uri? ->
-                                imageUri = uri
-                            }
-
-                        imageUri?.let {
-                            if (Build.VERSION.SDK_INT < 28) {
-                                bitmap.value = MediaStore.Images
-                                    .Media.getBitmap(context.contentResolver, it)
-
-                            } else {
-                                val source = ImageDecoder
-                                    .createSource(context.contentResolver, it)
-                                bitmap.value = ImageDecoder.decodeBitmap(source)
-                            }
 
 
+                         val selectImageLauncher = rememberLauncherForActivityResult(
+                            ActivityResultContracts.GetContent()
+                        ) { uri ->
+                            imageUri = uri
                         }
 
+                        //Adress uri for image
+
+
+
                         Button(
-                            onClick = { launcher.launch("image/") },
+                            onClick = { selectImageLauncher.launch("image/*") },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = background,
                                 contentColor = darkgreybackground
@@ -530,20 +526,11 @@ fun AddNewBookScreen() {
                                 modifier = Modifier
                                     .background(background)
                             ) {
-                                if (bitmap.value == null)
+                                if (imageUri == null)
                                     Image(painterResource(id = R.drawable.picture_24), "Pick image")
                                 else {
 
-                                    bitmap.value?.let { btm ->
-                                        Image(
-                                            bitmap = btm.asImageBitmap(),
-                                            contentDescription = null,
-                                            modifier = Modifier.size(
-                                                height = 200.dp,
-                                                width = 150.dp
-                                            )
-                                        )
-                                    }
+                                   Image(painter = rememberImagePainter(data = Uri.parse(imageUri.toString())), contentDescription = "",Modifier.size(height = 200.dp, width = 150.dp))
 
                                 }
 
@@ -566,8 +553,11 @@ fun AddNewBookScreen() {
         ) {
             Button(
                 onClick = {
-                    // bookViewModel.insertBook(Book(1, title = title))
-                    // navController.navigate(Routes.BookShelfScreen.route)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        bookViewModel.insertBook(Book(1,title.text,author.text,publicationDate.text,categories.text,pages.text.toInt(),isbn.text,description.text,publisher.text,language.text,edition.text,subtitle.text,imageUri.toString()))
+                        navController.navigate(Routes.BookShelfScreen.route)
+                    }
+
                 },
                 modifier = Modifier
                     .width(300.dp)
@@ -591,3 +581,4 @@ fun AddNewBookScreen() {
 
 
 }
+

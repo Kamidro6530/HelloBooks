@@ -9,15 +9,18 @@ import javax.inject.Singleton
 @Singleton
 class BookRepository @Inject constructor(private val bookDao: BookDao) {
 
-     fun insertBook(book : Book){
-        bookDao.insertBook(book)
+    suspend fun insertBook(book : Book){
+        CoroutineScope(Dispatchers.IO).launch {
+            bookDao.insertBook(book)
+
+        }
     }
 
-     fun deleteBook(book : Book){
+    suspend fun deleteBook(book : Book){
         bookDao.deleteBook(book)
     }
 
-     fun getAllBooks() : Deferred<List<Book>> =
+    suspend fun getAllBooks() : Deferred<List<Book>> =
         CoroutineScope(Dispatchers.IO).async {
             bookDao.getAllBooks()
         }

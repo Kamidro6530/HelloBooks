@@ -25,11 +25,11 @@ class BookViewModel @Inject constructor( val bookRepository: BookRepository) : V
         }
     }
 
-    fun insertBook(book: Book) {
+    suspend fun insertBook(book: Book) {
         viewModelScope.launch { bookRepository.insertBook(book)  }
     }
 
-    fun deleteBook(book: Book){
+    suspend  fun deleteBook(book: Book){
         viewModelScope.launch { bookRepository.deleteBook(book) }
     }
 
