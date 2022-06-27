@@ -10,7 +10,8 @@ import com.example.hellobooks.R
 
 @Entity()
 data class Book(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     @ColumnInfo(name = "title") val title: String= "",
     @ColumnInfo(name = "author") val author: String = "",
     @ColumnInfo(name = "publication_date") val publicationDate: String = "",

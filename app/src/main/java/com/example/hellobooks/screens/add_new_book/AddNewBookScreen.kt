@@ -1,6 +1,5 @@
 package com.example.hellobooks.screens
 
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -45,7 +44,7 @@ fun AddNewBookScreen(navController : NavHostController) {
     var title by remember { mutableStateOf(TextFieldValue("")) }
     var author by remember { mutableStateOf(TextFieldValue("")) }
     var publicationDate by remember { mutableStateOf(TextFieldValue("")) }
-    var pages by remember { mutableStateOf(TextFieldValue("")) }
+    var pages by remember { mutableStateOf(TextFieldValue("0")) }
     var categories by remember { mutableStateOf(TextFieldValue("")) }
     var isbn by remember { mutableStateOf(TextFieldValue("")) }
     var description by remember { mutableStateOf(TextFieldValue("")) }
@@ -554,9 +553,25 @@ fun AddNewBookScreen(navController : NavHostController) {
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
-                        bookViewModel.insertBook(Book(1,title.text,author.text,publicationDate.text,categories.text,pages.text.toInt(),isbn.text,description.text,publisher.text,language.text,edition.text,subtitle.text,imageUri.toString()))
-                        navController.navigate(Routes.BookShelfScreen.route)
+                        bookViewModel.insertBook(
+                            Book(
+                                0,
+                                title.text,
+                                author.text,
+                                publicationDate.text,
+                                categories.text,
+                                pages.text.toInt(),
+                                isbn.text,
+                                description.text,
+                                publisher.text,
+                                language.text,
+                                edition.text,
+                                subtitle.text,
+                                imageUri.toString()
+                            )
+                        )
                     }
+                    navController.navigate(Routes.BookShelfScreen.route)
 
                 },
                 modifier = Modifier
