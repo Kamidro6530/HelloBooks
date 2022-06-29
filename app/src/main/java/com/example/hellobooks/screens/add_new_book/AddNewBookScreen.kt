@@ -1,5 +1,6 @@
 package com.example.hellobooks.screens
 
+import android.content.Intent
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,12 +16,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat.startActivityForResult
+import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
@@ -495,19 +499,19 @@ fun AddNewBookScreen(navController : NavHostController) {
                     Row() {
 
 
-
+                        val context = LocalContext.current
                          val selectImageLauncher = rememberLauncherForActivityResult(
-                            ActivityResultContracts.GetContent()
+                            ActivityResultContracts.OpenDocument()
                         ) { uri ->
-                            imageUri = uri
+                             //Long-term access to Uri
+                             context.contentResolver.takePersistableUriPermission(uri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+
+                             imageUri = uri
+
                         }
 
-                        //Adress uri for image
-
-
-
                         Button(
-                            onClick = { selectImageLauncher.launch("image/*") },
+                            onClick = { selectImageLauncher.launch(arrayOf("image/*")) },
                             colors = ButtonDefaults.outlinedButtonColors(
                                 containerColor = background,
                                 contentColor = darkgreybackground
@@ -596,4 +600,7 @@ fun AddNewBookScreen(navController : NavHostController) {
 
 
 }
+
+
+
 
