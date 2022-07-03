@@ -36,10 +36,7 @@ import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.room.book.Book
-import com.example.hellobooks.ui.theme.background
-import com.example.hellobooks.ui.theme.darkgreybackground
-import com.example.hellobooks.ui.theme.primary
-import com.example.hellobooks.ui.theme.roboto_fonts
+import com.example.hellobooks.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,21 +46,27 @@ import kotlinx.coroutines.launch
 fun BookShelfListItem(book: Book) {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val listOfBooks = bookViewModel.listOfBooks.collectAsState()
+    val listOfBooks = bookViewModel.listOfBooks
 
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default)
+    val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
+        if (it == DismissValue.DismissedToStart){
+            listOfBooks.remove(book)
+            CoroutineScope(Dispatchers.IO).launch {
+                bookViewModel.deleteBook(book)
+            }
+        }
+        true
+    })
 
 
     SwipeToDismiss(
         state = dismissState,
         background = {
             val color = when (dismissState.dismissDirection) {
-                DismissDirection.StartToEnd -> Color.Transparent
-                DismissDirection.EndToStart -> Color.Red
-                null -> Color.Transparent
+                DismissDirection.StartToEnd -> darkgreybackground
+                DismissDirection.EndToStart -> deleteItemColor
+                null -> darkgreybackground
             }
-            val direction = dismissState.dismissDirection
-
 
                 Box(
                     modifier = Modifier
@@ -73,18 +76,13 @@ fun BookShelfListItem(book: Book) {
                 ) {
                     Column(modifier = Modifier.align(Alignment.CenterEnd)) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBack,
+                            imageVector = Icons.Default.Delete,
                             contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.align(Alignment.CenterHorizontally)
+                            tint = primary,
+                            modifier = Modifier.align(Alignment.CenterHorizontally).padding(30.dp).size(30.dp)
                         )
                         Spacer(modifier = Modifier.heightIn(5.dp))
-                        Text(
-                            text = "Move to Bin",
-                            textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.LightGray
-                        )
+
 
                     }
                 }

@@ -17,4 +17,7 @@ val tertiary = Color(0xFFA4EBF3)
 val background = Color(0xFF495057)
 val darkgreybackground = Color(0xFF343a40)
 
+//SwipeToDismiss(BookShelfItem)
+val deleteItemColor = Color(0xFFA7171A)
+
 

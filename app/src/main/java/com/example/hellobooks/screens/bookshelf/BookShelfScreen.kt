@@ -36,14 +36,14 @@ import kotlinx.coroutines.launch
 fun BookShelfScreen() {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val listOfBooks = bookViewModel.listOfBooks.collectAsState()
+
 
 
     LazyColumn(
         Modifier
             .fillMaxSize()
     ) {
-        items(listOfBooks.value) { book ->
+        items(bookViewModel.listOfBooks) { book ->
             BookShelfListItem(book = book)
 
 

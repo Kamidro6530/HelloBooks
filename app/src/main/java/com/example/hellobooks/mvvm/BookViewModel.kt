@@ -1,5 +1,6 @@
 package com.example.hellobooks.mvvm
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
@@ -14,13 +15,13 @@ import javax.inject.Inject
 @HiltViewModel
 class BookViewModel @Inject constructor( val bookRepository: BookRepository) : ViewModel() {
 
-    private var _listOfBooks = MutableStateFlow<MutableList<Book>>(mutableStateListOf<Book>())
-    val listOfBooks = _listOfBooks
+    private var _listOfBooks = mutableStateListOf<Book>()
+    val listOfBooks  = _listOfBooks
 
 
     init {
         viewModelScope.launch {
-            listOfBooks.value = bookRepository.getAllBooks().await() as MutableList<Book>
+           _listOfBooks.addAll( bookRepository.getAllBooks().await() )
 
         }
     }
