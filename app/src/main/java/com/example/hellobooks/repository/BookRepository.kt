@@ -17,7 +17,9 @@ class BookRepository @Inject constructor(private val bookDao: BookDao) {
     }
 
     suspend fun deleteBook(book : Book){
-        bookDao.deleteBook(book)
+        CoroutineScope(Dispatchers.IO).launch {
+            bookDao.deleteBook(book)
+        }
     }
 
     suspend fun getAllBooks() : Deferred<List<Book>> =

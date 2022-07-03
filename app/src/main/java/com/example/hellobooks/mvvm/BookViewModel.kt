@@ -14,13 +14,13 @@ import javax.inject.Inject
 @HiltViewModel
 class BookViewModel @Inject constructor( val bookRepository: BookRepository) : ViewModel() {
 
-    private var _listOfBooks = MutableStateFlow<List<Book>>(mutableStateListOf<Book>())
+    private var _listOfBooks = MutableStateFlow<MutableList<Book>>(mutableStateListOf<Book>())
     val listOfBooks = _listOfBooks
 
 
     init {
         viewModelScope.launch {
-            listOfBooks.value = bookRepository.getAllBooks().await()
+            listOfBooks.value = bookRepository.getAllBooks().await() as MutableList<Book>
 
         }
     }
