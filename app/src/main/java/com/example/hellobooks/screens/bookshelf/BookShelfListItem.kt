@@ -1,34 +1,22 @@
 package com.example.hellobooks.screens.bookshelf
 
 import android.net.Uri
-import android.widget.Toast
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,7 +24,10 @@ import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.room.book.Book
-import com.example.hellobooks.ui.theme.*
+import com.example.hellobooks.ui.theme.darkgreybackground
+import com.example.hellobooks.ui.theme.deleteItemColor
+import com.example.hellobooks.ui.theme.primary
+import com.example.hellobooks.ui.theme.roboto_fonts
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,16 +38,21 @@ fun BookShelfListItem(book: Book) {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
     val listOfBooks = bookViewModel.listOfBooks
+    //Alert dialog status state (true = confirmed remove book)
+    val removalConfirmed = remember { mutableStateOf(false)}
 
-    val dismissState = rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-        if (it == DismissValue.DismissedToStart){
-            listOfBooks.remove(book)
-            CoroutineScope(Dispatchers.IO).launch {
-                bookViewModel.deleteBook(book)
+    val dismissState =
+        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
+
+            if (removalConfirmed.value) {
+
+                listOfBooks.remove(book)
+                CoroutineScope(Dispatchers.IO).launch {
+                    bookViewModel.deleteBook(book)
+                }
             }
-        }
-        true
-    })
+            true
+        })
 
 
     SwipeToDismiss(
@@ -68,33 +64,42 @@ fun BookShelfListItem(book: Book) {
                 null -> darkgreybackground
             }
 
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(color)
-                        .padding(8.dp)
-                ) {
-                    Column(modifier = Modifier.align(Alignment.CenterEnd)) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = null,
-                            tint = primary,
-                            modifier = Modifier.align(Alignment.CenterHorizontally).padding(30.dp).size(30.dp)
-                        )
-                        Spacer(modifier = Modifier.heightIn(5.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(color)
+                    .padding(8.dp)
+            ) {
+                Column(modifier = Modifier.align(Alignment.CenterEnd)) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = null,
+                        tint = primary,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(30.dp)
+                            .size(30.dp)
+                    )
+                    Spacer(modifier = Modifier.heightIn(5.dp))
 
 
-                    }
                 }
+            }
 
         },
-        /**** Dismiss Content */
         dismissContent = {
             ItemContent(book)
         },
-        /*** Set Direction to dismiss */
         directions = setOf(DismissDirection.EndToStart),
     )
+
+
+    //If user swipe to dissmiss app start Dialog
+    if (dismissState.currentValue == DismissValue.DismissedToStart){
+        ConfirmDeleteBook()
+    }
+
+
 }
 
 

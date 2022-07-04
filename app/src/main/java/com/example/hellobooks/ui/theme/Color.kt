@@ -20,4 +20,7 @@ val darkgreybackground = Color(0xFF343a40)
 //SwipeToDismiss(BookShelfItem)
 val deleteItemColor = Color(0xFFA7171A)
 
+//AlertDialog button colors
+val dialogbuttonbackgroundcolors = Color(0xFFF6FDFD)
+
 
