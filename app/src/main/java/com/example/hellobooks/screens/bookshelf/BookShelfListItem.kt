@@ -11,49 +11,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
-import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.deleteItemColor
 import com.example.hellobooks.ui.theme.primary
 import com.example.hellobooks.ui.theme.roboto_fonts
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BookShelfListItem(book: Book) {
 
-    val bookViewModel = hiltViewModel<BookViewModel>()
-    val listOfBooks = bookViewModel.listOfBooks
-    //Alert dialog status state (true = confirmed remove book)
-    val removalConfirmed = remember { mutableStateOf(false)}
-
     val dismissState =
-        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = {
-
-            if (removalConfirmed.value) {
-
-                listOfBooks.remove(book)
-                CoroutineScope(Dispatchers.IO).launch {
-                    bookViewModel.deleteBook(book)
-                }
-            }
-            true
-        })
-
+        rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = { true })
 
     SwipeToDismiss(
         state = dismissState,
@@ -95,8 +72,9 @@ fun BookShelfListItem(book: Book) {
 
 
     //If user swipe to dissmiss app start Dialog
-    if (dismissState.currentValue == DismissValue.DismissedToStart){
-        ConfirmDeleteBook()
+    if (dismissState.currentValue == DismissValue.DismissedToStart) {
+        ConfirmDeleteBook(book, dismissState)
+
     }
 
 
