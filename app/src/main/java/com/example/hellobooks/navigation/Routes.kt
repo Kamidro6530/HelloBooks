@@ -6,6 +6,7 @@ sealed class Routes(var route : String){
     object FindBookScreen : Routes("findBookScreen")
     object StatisticsScreen : Routes("statisticsScreen")
     object WishListScreen : Routes("wishListScreen")
+    object BookInformationScreen : Routes("bookInformationScreen")
 
     fun withArgs(vararg args: String?): String {
         return buildString {

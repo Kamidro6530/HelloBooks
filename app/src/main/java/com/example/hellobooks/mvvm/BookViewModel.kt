@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class BookViewModel @Inject constructor( val bookRepository: BookRepository) : ViewModel() {
+class BookViewModel @Inject constructor( val bookRepository: BookRepository,val converters: Converters) : ViewModel() {
 
     private var _listOfBooks = mutableStateListOf<Book>()
     val listOfBooks  = _listOfBooks

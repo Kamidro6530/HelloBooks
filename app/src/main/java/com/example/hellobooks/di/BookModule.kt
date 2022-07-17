@@ -2,6 +2,7 @@ package com.example.hellobooks.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.repository.BookRepository
 import com.example.hellobooks.room.BookDao
 import com.example.hellobooks.room.BookDatabase
@@ -30,5 +31,11 @@ object BookModule {
     @Provides
     fun provideBookRepository(bookDao: BookDao) : BookRepository {
         return BookRepository(bookDao)
+    }
+
+    @Singleton
+    @Provides
+    fun provideConverters(): Converters {
+        return Converters()
     }
 }

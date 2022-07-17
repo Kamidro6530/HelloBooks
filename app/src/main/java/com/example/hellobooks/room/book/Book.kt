@@ -25,7 +25,7 @@ data class Book(
     @ColumnInfo(name = "edition") val edition: String = "",
     @ColumnInfo(name = "subtitle") val subtitle: String = "",
     //Image
-    @ColumnInfo(name = "image") val imageUri: String = "",
+    @ColumnInfo(name = "image") val imageUri: String ,
 
 
 

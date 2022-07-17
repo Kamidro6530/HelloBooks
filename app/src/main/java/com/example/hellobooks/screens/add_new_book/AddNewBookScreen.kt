@@ -1,7 +1,10 @@
 package com.example.hellobooks.screens
 
+import android.content.ContentValues.TAG
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -36,6 +39,10 @@ import com.example.hellobooks.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
+import java.util.*
 
 
 @Composable
@@ -557,6 +564,8 @@ fun AddNewBookScreen(navController : NavHostController) {
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
+                        //Get only unique value from uri and insert to database(not able to send full uri for navigation)
+                       val uniqueKey = imageUri.toString().split("document/")
                         bookViewModel.insertBook(
                             Book(
                                 0,
@@ -571,9 +580,10 @@ fun AddNewBookScreen(navController : NavHostController) {
                                 language.text,
                                 edition.text,
                                 subtitle.text,
-                                imageUri.toString()
+                                uniqueKey[1] // Image
                             )
                         )
+                        Log.d(TAG, "AddNewBookScreen: ${uniqueKey[1]}")
                     }
                     navController.navigate(Routes.BookShelfScreen.route)
 

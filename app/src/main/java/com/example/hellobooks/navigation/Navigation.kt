@@ -5,7 +5,11 @@ import androidx.compose.runtime.MutableState
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+
+import androidx.navigation.navArgument
+
 import com.example.hellobooks.screens.*
+import com.example.hellobooks.screens.book.BookInformationScreen
 
 
 @Composable
@@ -18,7 +22,7 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
 
             composable(Routes.BookShelfScreen.route) {
                 bottomBarVisibilityState.value = true
-                BookShelfScreen()
+                BookShelfScreen(navController)
             }
             composable(Routes.AddNewBookScreen.route) {
                 bottomBarVisibilityState.value = false
@@ -35,6 +39,13 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             composable(Routes.WishListScreen.route) {
                 bottomBarVisibilityState.value = true
                 WishListScreen()
+            }
+            composable(Routes.BookInformationScreen.route + "/{book}",
+                arguments = listOf(
+                    navArgument("book"){}
+                )){ entry ->
+                bottomBarVisibilityState.value = false
+                BookInformationScreen(jsonBook = entry.arguments?.getString("book"))
             }
 
 

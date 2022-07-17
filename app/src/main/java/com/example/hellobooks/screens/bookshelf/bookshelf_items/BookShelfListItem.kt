@@ -19,11 +19,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
+import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.deleteItemColor
 import com.example.hellobooks.ui.theme.primary
 import com.example.hellobooks.ui.theme.roboto_fonts
+import java.net.URLDecoder
+import java.util.*
 
 @OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
@@ -116,9 +119,8 @@ fun ItemContent(book: Book) {
                                 Modifier.size(30.dp)
                             )
                         } else {
-
                             Image(
-                                painter = rememberImagePainter(data = Uri.parse(book.imageUri)),
+                                painter = rememberImagePainter(data = Uri.parse(Constants().galleryImagePath+book.imageUri)),
                                 contentDescription = "",
                                 Modifier.size(height = 200.dp, width = 150.dp)
                             )
