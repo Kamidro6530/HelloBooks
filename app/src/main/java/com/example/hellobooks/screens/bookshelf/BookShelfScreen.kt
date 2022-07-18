@@ -1,5 +1,6 @@
 package com.example.hellobooks.screens
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -44,7 +45,10 @@ fun BookShelfScreen (navController: NavHostController) {
                     Modifier
                         .wrapContentHeight()
                         .clickable(onClick = {
-                            navController.navigate(Routes.BookInformationScreen.withArgs(bookViewModel.converters.bookToJson(book)))
+                            navController.navigate(
+                                Routes.BookInformationScreen.withArgs(bookViewModel.converters.bookToJson(book))
+                            )
+                            Log.d("TEST", "BookShelfScreen: ${book.imageUri}")
                         })) {
                     BookShelfListItem(book = book)
 

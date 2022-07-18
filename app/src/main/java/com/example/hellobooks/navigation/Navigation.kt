@@ -42,10 +42,12 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             }
             composable(Routes.BookInformationScreen.route + "/{book}",
                 arguments = listOf(
-                    navArgument("book"){}
+                    navArgument("book"){},
                 )){ entry ->
                 bottomBarVisibilityState.value = false
-                BookInformationScreen(jsonBook = entry.arguments?.getString("book"))
+                BookInformationScreen(
+                    jsonBook = entry.arguments?.getString("book"),
+                    )
             }
 
 

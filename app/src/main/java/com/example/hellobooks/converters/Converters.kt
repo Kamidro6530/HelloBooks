@@ -2,8 +2,6 @@ package com.example.hellobooks.converters
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.view.Gravity.apply
-import androidx.core.view.GravityCompat.apply
 import androidx.room.TypeConverter
 import com.example.hellobooks.room.book.Book
 import com.google.gson.Gson
@@ -25,6 +23,7 @@ class Converters {
     }
 
     fun bookToJson(book: Book) : String?{
+
         val gson = Gson()
         val bookObject = book.apply{
            Book(id, title, author, publicationDate, categories, pages, isbn, description, publisher, language,edition, subtitle, imageUri)
@@ -36,7 +35,16 @@ class Converters {
 
 
     fun jsonToBook(json : String?) : Book?{
+
         val gson = Gson()
         return gson.fromJson(json,Book::class.java)
+    }
+
+    fun decodeUriKey(code : String): String {
+        return code.replace("+","%")
+    }
+
+    fun encodeUriKey(code : String): String {
+        return code.replace("%","+")
     }
 }

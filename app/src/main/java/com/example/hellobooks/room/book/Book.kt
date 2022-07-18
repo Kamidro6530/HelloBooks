@@ -1,12 +1,8 @@
 package com.example.hellobooks.room.book
 
-import android.graphics.Bitmap
-import android.net.Uri
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.example.hellobooks.R
 
 @Entity()
 data class Book(
@@ -25,7 +21,7 @@ data class Book(
     @ColumnInfo(name = "edition") val edition: String = "",
     @ColumnInfo(name = "subtitle") val subtitle: String = "",
     //Image
-    @ColumnInfo(name = "image") val imageUri: String ,
+    @ColumnInfo(name = "image") val imageUri: String,
 
 
 

@@ -17,9 +17,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.constants.Constants
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.deleteItemColor
@@ -86,6 +88,8 @@ fun BookShelfListItem(book: Book) {
 
 @Composable
 fun ItemContent(book: Book) {
+    val bookViewModel = hiltViewModel<BookViewModel>()
+
     Column(
         Modifier
             .fillMaxWidth()
@@ -112,7 +116,7 @@ fun ItemContent(book: Book) {
                             .size(height = 180.dp, width = 130.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (book.imageUri == "null") {
+                        if (book.imageUri.toString() == "null") {
                             Image(
                                 painter = painterResource(id = R.drawable.picture_24),
                                 null,
@@ -120,7 +124,7 @@ fun ItemContent(book: Book) {
                             )
                         } else {
                             Image(
-                                painter = rememberImagePainter(data = Uri.parse(Constants().galleryImagePath+book.imageUri)),
+                                painter = rememberImagePainter(data = Uri.parse(Constants().galleryImagePath+ bookViewModel.converters.decodeUriKey(book.imageUri))),
                                 contentDescription = "",
                                 Modifier.size(height = 200.dp, width = 150.dp)
                             )
