@@ -44,7 +44,7 @@ class Converters {
         return code.replace("+","%")
     }
 
-    fun encodeUriKey(code : String): String {
-        return code.replace("%","+")
+    fun encodeUriKey(code : String?): String {
+        return code?.replace("%","+") ?: "null"
     }
 }

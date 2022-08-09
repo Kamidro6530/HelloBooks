@@ -1,47 +1,240 @@
 package com.example.hellobooks.screens.book
 
-import android.content.ContentValues.TAG
 import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
-import com.example.hellobooks.R
 import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.room.book.Book
-import java.util.*
+import com.example.hellobooks.ui.theme.*
+
+
 
 @Composable
 fun BookInformationScreen(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
-    Log.d("TEST", "JSON: ${jsonBook}")
     val book = bookViewModel.converters.jsonToBook(jsonBook)
 
+    val image =Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book!!.imageUri)
+    val scrollState = rememberScrollState()
 
-    if (book?.imageUri.toString() == "null") {
-        Image(
-            painter = painterResource(id = R.drawable.picture_24),
-            null,
-            Modifier.size(30.dp)
-        )
-    } else {
-        val image =Constants().galleryImagePath+ bookViewModel.converters.decodeUriKey(book!!.imageUri)
-        Image(
-            painter = rememberImagePainter(data = Uri.parse(image)),
-            contentDescription = "",
-            Modifier.size(height = 200.dp, width = 150.dp)
-        )
+    Box(
+    ) {
+
+        if (book.imageUri == "null") {
+            Modifier.background(background)
+        } else {
+            Image(
+                painter = rememberImagePainter(data = Uri.parse(image)),
+                contentDescription = "background",
+                Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+            )
+        }
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally,
+
+            ) {
+
+            Spacer(modifier = Modifier.height(200.dp))
+
+
+            MainInformationCard(book)
+            Spacer(modifier = Modifier.height(5.dp))
+            DescriptionCard(book = book)
+            Spacer(modifier = Modifier.height(5.dp))
+            InformationCard(book = book)
+
+
+        }
     }
-
-
-
-
-
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MainInformationCard(book: Book) {
+    Card(
+        modifier = Modifier
+            .width(330.dp)
+            .height(125.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = darkgreybackground,
+            contentColor = primary
+        )
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                //Title
+                Text(
+                    book.title,
+                    Modifier.padding(10.dp),
+                    fontWeight = FontWeight.Bold,
+                    color = tertiary,
+                    fontSize = 28.sp,
+                    maxLines = 2,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(
+                    Modifier
+                        .width(330.dp)
+                        .height(1.dp)
+                        .background(background)
+
+                )
+                //Author
+                Text(
+                    book.author,
+                    Modifier.padding(10.dp),
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 20.sp,
+                    maxLines = 1,
+                    textAlign = TextAlign.Center
+                )
+
+
+            }
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DescriptionCard(book: Book) {
+    Card(
+        modifier = Modifier
+            .width(330.dp)
+            .wrapContentHeight(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = darkgreybackground,
+            contentColor = primary
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(1f)
+                .blur(
+                    radius = 28.dp,
+                    edgeTreatment = BlurredEdgeTreatment.Unbounded
+                )
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                InformationTextField(value = book.description, label = "O mnie")
+
+            }
+        }
+
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun InformationCard(book: Book) {
+
+    Card(
+        modifier = Modifier
+            .padding(vertical = 16.dp)
+            .width(330.dp)
+            .wrapContentHeight(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = darkgreybackground,
+            contentColor = primary
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(1f)
+                .blur(
+                    radius = 28.dp,
+                    edgeTreatment = BlurredEdgeTreatment.Unbounded
+                )
+
+
+        ) {
+            Column(
+                verticalArrangement = Arrangement.SpaceEvenly,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(3.dp))
+                InformationTextField(value = book.publicationDate, label = "Data publikacji")
+
+                InformationTextField(value = book.categories, label = "Kategorie")
+
+                InformationTextField(value = book.pages.toString(), label = "Liczba stron")
+
+                InformationTextField(value = book.isbn, label = "Kod ISBN")
+
+            }
+        }
+
+    }
+}
+
+@Composable
+fun InformationTextField(value: String, label: String) {
+    TextField(
+        value = value,
+        onValueChange = {
+            value
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        label = {
+            Text(
+                text = label,
+                fontSize = 10.sp,
+                fontFamily = roboto_fonts,
+                fontWeight = FontWeight.Light,
+                color = primary
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = darkgreybackground,
+            focusedIndicatorColor = darkgreybackground,
+            unfocusedIndicatorColor = darkgreybackground, textColor = primary
+        ),
+        readOnly = true
+    )
+}
+
+
+
+
+

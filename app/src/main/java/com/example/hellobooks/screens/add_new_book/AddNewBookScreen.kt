@@ -557,7 +557,8 @@ fun AddNewBookScreen(navController : NavHostController) {
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
                         //Get only unique value from uri and insert to database(not able to send full uri for navigation)
-                       val uniqueKey = imageUri.toString().split("/image")
+
+                            val uniqueKey = imageUri?.toString()?.split("/image")
                         bookViewModel.insertBook(
                             Book(
                                 0,
@@ -572,10 +573,9 @@ fun AddNewBookScreen(navController : NavHostController) {
                                 language.text,
                                 edition.text,
                                 subtitle.text,
-                                bookViewModel.converters.encodeUriKey( uniqueKey[1])   // Image
+                                bookViewModel.converters.encodeUriKey(uniqueKey?.get(1))   // Image
                             )
                         )
-                        Log.d("TEST", "AddNewBookScreen: ${uniqueKey[1]}")
                     }
                     navController.navigate(Routes.BookShelfScreen.route)
 

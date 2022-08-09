@@ -18,13 +18,14 @@ import com.example.hellobooks.navigation.Navigation
 import com.example.hellobooks.navigation.bottom_nav_bar.AppBottomNavigation
 import com.example.hellobooks.navigation.bottom_nav_bar.BottomBarItems
 import com.example.hellobooks.ui.theme.HelloBooksTheme
+import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        DynamicColors.applyToActivitiesIfAvailable(this.application)
         val viewModel : BookViewModel by viewModels<BookViewModel>()
 
         setContent {
