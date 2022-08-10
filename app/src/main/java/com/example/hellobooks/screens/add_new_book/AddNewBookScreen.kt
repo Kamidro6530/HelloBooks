@@ -503,7 +503,9 @@ fun AddNewBookScreen(navController : NavHostController) {
                             ActivityResultContracts.OpenDocument()
                         ) { uri ->
                              //Long-term access to Uri
-                             context.contentResolver.takePersistableUriPermission(uri!!,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                             if (uri != null) {
+                                 context.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                             }
 
                              imageUri = uri
 
