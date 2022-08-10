@@ -1,7 +1,6 @@
 package com.example.hellobooks.screens.book
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -28,14 +27,26 @@ import com.example.hellobooks.room.book.Book
 import com.example.hellobooks.ui.theme.*
 
 
-
 @Composable
 fun BookInformationScreen(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
 
-    val image =Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book!!.imageUri)
+    val image =
+        Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book!!.imageUri)
     val scrollState = rememberScrollState()
+    val mainInformationCardList = listOf(
+        Pair(book.publicationDate, "Data publikacji"),
+        Pair(book.categories, "Kategorie"),
+        Pair(book.pages.toString(), "Liczba stron"),
+        Pair(book.isbn, "Kod ISBN")
+    )
+    val additionalInformationCardList = listOf(
+        Pair(book.publisher, "Wydawca"),
+        Pair(book.language, "Język"),
+        Pair(book.edition, "Edycja/Wydanie"),
+        Pair(book.subtitle, "Podtytuł")
+    )
 
     Box(
     ) {
@@ -67,7 +78,11 @@ fun BookInformationScreen(jsonBook: String?) {
             Spacer(modifier = Modifier.height(5.dp))
             DescriptionCard(book = book)
             Spacer(modifier = Modifier.height(5.dp))
-            InformationCard(book = book)
+            InformationCard(list = mainInformationCardList)
+            if (additionalInformationCardList.any { it.first != "" }) {
+                Spacer(modifier = Modifier.height(5.dp))
+                InformationCard(list = additionalInformationCardList)
+            }
 
 
         }
@@ -80,7 +95,8 @@ fun MainInformationCard(book: Book) {
     Card(
         modifier = Modifier
             .width(330.dp)
-            .height(125.dp),
+            .height(125.dp)
+            .padding(vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
             containerColor = darkgreybackground,
@@ -133,6 +149,7 @@ fun DescriptionCard(book: Book) {
     Card(
         modifier = Modifier
             .width(330.dp)
+            .padding(vertical = 8.dp)
             .wrapContentHeight(),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(
@@ -162,11 +179,11 @@ fun DescriptionCard(book: Book) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InformationCard(book: Book) {
+fun InformationCard(list: List<Pair<String, String>>) {
 
     Card(
         modifier = Modifier
-            .padding(vertical = 16.dp)
+            .padding(vertical = 8.dp)
             .width(330.dp)
             .wrapContentHeight(),
         shape = RoundedCornerShape(16.dp),
@@ -191,13 +208,13 @@ fun InformationCard(book: Book) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
-                InformationTextField(value = book.publicationDate, label = "Data publikacji")
+                InformationTextField(value = list[0].first, label = list[0].second)
 
-                InformationTextField(value = book.categories, label = "Kategorie")
+                InformationTextField(value = list[1].first, label = list[1].second)
 
-                InformationTextField(value = book.pages.toString(), label = "Liczba stron")
+                InformationTextField(value = list[2].first, label = list[2].second)
 
-                InformationTextField(value = book.isbn, label = "Kod ISBN")
+                InformationTextField(value = list[3].first, label = list[3].second)
 
             }
         }
@@ -213,8 +230,7 @@ fun InformationTextField(value: String, label: String) {
             value
         },
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 8.dp),
+            .fillMaxWidth(),
         label = {
             Text(
                 text = label,

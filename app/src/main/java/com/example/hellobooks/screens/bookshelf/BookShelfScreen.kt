@@ -10,6 +10,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,10 +31,8 @@ fun BookShelfScreen (navController: NavHostController) {
     val bookViewModel = hiltViewModel<BookViewModel>()
 
 
-
     LazyColumn(
-        Modifier
-            .fillMaxSize()
+        Modifier.fillMaxSize()
     ) {
         if (bookViewModel.listOfBooks.isEmpty()) {
             item {
@@ -46,7 +45,11 @@ fun BookShelfScreen (navController: NavHostController) {
                         .wrapContentHeight()
                         .clickable(onClick = {
                             navController.navigate(
-                                Routes.BookInformationScreen.withArgs(bookViewModel.converters.bookToJson(book))
+                                Routes.BookInformationScreen.withArgs(
+                                    bookViewModel.converters.bookToJson(
+                                        book
+                                    )
+                                )
                             )
                             Log.d("TEST", "BookShelfScreen: ${book.imageUri}")
                         })) {
