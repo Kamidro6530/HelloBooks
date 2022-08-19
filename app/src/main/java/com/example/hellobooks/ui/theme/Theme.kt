@@ -15,20 +15,23 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.colorResource
 import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import com.google.android.material.color.DynamicColors
 
 private val DarkColorScheme = darkColorScheme(
     primary = primary,
     secondary = secondary,
     tertiary = tertiary,
-    background = darkgreybackground
+    background = darkgreybackground,
+    surface = barsColors
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = primary,
     secondary = secondary,
     tertiary = tertiary,
-    background = darkgreybackground
+    background = darkgreybackground,
+    surface = barsColors
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -48,6 +51,7 @@ fun HelloBooksTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
+
     val colors = when {
         Build.VERSION.SDK_INT >= 31 -> {
 
@@ -56,18 +60,33 @@ fun HelloBooksTheme(
                     primary = primary,
                     secondary = secondary,
                     tertiary = tertiary,
-                    background = darkgreybackground
+                    background = darkgreybackground,
+                    surface = barsColors
                 )
                 else -> lightColorScheme(
                     primary = primary,
                     secondary = secondary,
                     tertiary = tertiary,
-                    background = darkgreybackground
+                    background = darkgreybackground,
+                    surface = barsColors
                 )
             }
         }
         darkTheme -> DarkColorScheme
         else -> DarkColorScheme
+    }
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colors.surface.toArgb()
+            window.navigationBarColor = colors.surface.toArgb()
+
+            WindowCompat.getInsetsController(window, view)
+                .isAppearanceLightStatusBars = darkTheme
+            WindowCompat.getInsetsController(window, view)
+                .isAppearanceLightNavigationBars = darkTheme
+        }
     }
 
 

@@ -23,4 +23,7 @@ val deleteItemColor = Color(0xFFA7171A)
 //AlertDialog button colors
 val dialogbuttonbackgroundcolors = Color(0xFFF6FDFD)
 
+//Status bar and navigation bar color
+val  barsColors = Color(0xFF2A2E33)
+
 
