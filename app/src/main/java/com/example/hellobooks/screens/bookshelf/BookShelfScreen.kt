@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
@@ -32,7 +33,8 @@ fun BookShelfScreen (navController: NavHostController) {
 
 
     LazyColumn(
-        Modifier.fillMaxSize()
+        state = rememberLazyListState(),
+        modifier = Modifier.fillMaxSize()
     ) {
         if (bookViewModel.listOfBooks.isEmpty()) {
             item {

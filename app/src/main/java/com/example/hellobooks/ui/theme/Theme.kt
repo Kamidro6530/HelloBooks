@@ -23,7 +23,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = secondary,
     tertiary = tertiary,
     background = darkgreybackground,
-    surface = barsColors
+    surface = systemBarsColors
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -31,7 +31,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = secondary,
     tertiary = tertiary,
     background = darkgreybackground,
-    surface = barsColors
+    surface = systemBarsColors
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -43,7 +43,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
-@Suppress("IMPLICIT_CAST_TO_ANY")
+
 @Composable
 fun HelloBooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -61,14 +61,14 @@ fun HelloBooksTheme(
                     secondary = secondary,
                     tertiary = tertiary,
                     background = darkgreybackground,
-                    surface = barsColors
+                    surface = systemBarsColors
                 )
                 else -> lightColorScheme(
                     primary = primary,
                     secondary = secondary,
                     tertiary = tertiary,
                     background = darkgreybackground,
-                    surface = barsColors
+                    surface = systemBarsColors
                 )
             }
         }

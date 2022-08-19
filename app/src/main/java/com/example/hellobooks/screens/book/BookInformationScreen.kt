@@ -76,9 +76,15 @@ fun BookInformationScreen(jsonBook: String?) {
 
             MainInformationCard(book)
             Spacer(modifier = Modifier.height(5.dp))
+
+            if (book.description != "")
             DescriptionCard(book = book)
-            Spacer(modifier = Modifier.height(5.dp))
-            InformationCard(list = mainInformationCardList)
+
+            if (mainInformationCardList.any { it.first != "" && it.first != "0"}) {
+                Spacer(modifier = Modifier.height(5.dp))
+                InformationCard(list = mainInformationCardList)
+            }
+
             if (additionalInformationCardList.any { it.first != "" }) {
                 Spacer(modifier = Modifier.height(5.dp))
                 InformationCard(list = additionalInformationCardList)
