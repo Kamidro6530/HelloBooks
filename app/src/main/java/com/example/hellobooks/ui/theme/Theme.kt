@@ -13,6 +13,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.colorResource
 import androidx.core.view.ViewCompat
 import com.google.android.material.color.DynamicColors
 
@@ -39,7 +40,7 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
-
+@Suppress("IMPLICIT_CAST_TO_ANY")
 @Composable
 fun HelloBooksTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -47,28 +48,34 @@ fun HelloBooksTheme(
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
+    val colors = when {
+        Build.VERSION.SDK_INT >= 31 -> {
 
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            when {
+                darkTheme -> darkColorScheme(
+                    primary = primary,
+                    secondary = secondary,
+                    tertiary = tertiary,
+                    background = darkgreybackground
+                )
+                else -> lightColorScheme(
+                    primary = primary,
+                    secondary = secondary,
+                    tertiary = tertiary,
+                    background = darkgreybackground
+                )
+            }
         }
         darkTheme -> DarkColorScheme
         else -> DarkColorScheme
     }
-    val view = LocalView.current
-    if (!view.isInEditMode) {
-        SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
-        }
-    }
+
 
 
 
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = colors,
         typography = Typography,
         content = content
     )
