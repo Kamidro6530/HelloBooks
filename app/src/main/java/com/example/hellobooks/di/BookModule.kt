@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.room.Room
 import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.repository.BookRepository
-import com.example.hellobooks.room.BookDao
-import com.example.hellobooks.room.BookDatabase
+import com.example.hellobooks.local.room.BookDao
+import com.example.hellobooks.local.room.BookDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -24,7 +24,7 @@ object BookModule {
     }
 
     @Provides
-    fun provideBookDao(database: BookDatabase) : BookDao{
+    fun provideBookDao(database: BookDatabase) : BookDao {
         return database.bookDao()
     }
     @Singleton

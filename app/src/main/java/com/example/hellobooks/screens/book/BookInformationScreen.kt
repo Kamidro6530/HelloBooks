@@ -23,7 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.mvvm.BookViewModel
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.ui.theme.*
 
 
@@ -228,6 +228,7 @@ fun InformationCard(list: List<Pair<String, String>>) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InformationTextField(value: String, label: String) {
     TextField(

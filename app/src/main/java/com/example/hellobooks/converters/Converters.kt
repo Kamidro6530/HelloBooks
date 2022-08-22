@@ -3,7 +3,7 @@ package com.example.hellobooks.converters
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 
@@ -37,7 +37,7 @@ class Converters {
     fun jsonToBook(json : String?) : Book?{
 
         val gson = Gson()
-        return gson.fromJson(json,Book::class.java)
+        return gson.fromJson(json, Book::class.java)
     }
 
     fun decodeUriKey(code : String): String {

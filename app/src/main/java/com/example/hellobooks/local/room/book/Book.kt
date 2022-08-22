@@ -1,4 +1,4 @@
-package com.example.hellobooks.room.book
+package com.example.hellobooks.local.room.book
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

@@ -23,7 +23,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hellobooks.R
 import com.example.hellobooks.mvvm.BookViewModel
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.ui.theme.*
 import kotlinx.coroutines.launch
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hellobooks.converters.Converters
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow

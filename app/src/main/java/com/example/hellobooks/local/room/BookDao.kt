@@ -1,7 +1,7 @@
-package com.example.hellobooks.room
+package com.example.hellobooks.local.room
 
 import androidx.room.*
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 
 @Dao
 interface BookDao {

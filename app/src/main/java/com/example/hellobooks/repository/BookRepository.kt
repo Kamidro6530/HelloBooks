@@ -1,7 +1,7 @@
 package com.example.hellobooks.repository
 
-import com.example.hellobooks.room.book.Book
-import com.example.hellobooks.room.BookDao
+import com.example.hellobooks.local.room.book.Book
+import com.example.hellobooks.local.room.BookDao
 import kotlinx.coroutines.*
 import javax.inject.Inject
 import javax.inject.Singleton

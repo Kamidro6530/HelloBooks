@@ -22,7 +22,7 @@ import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.mvvm.BookViewModel
-import com.example.hellobooks.room.book.Book
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.deleteItemColor
 import com.example.hellobooks.ui.theme.primary

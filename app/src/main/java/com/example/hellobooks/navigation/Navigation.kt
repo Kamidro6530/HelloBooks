@@ -2,6 +2,7 @@ package com.example.hellobooks.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,6 +13,7 @@ import com.example.hellobooks.screens.*
 import com.example.hellobooks.screens.book.BookInformationScreen
 
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun Navigation(navController: NavHostController, bottomBarVisibilityState: MutableState<Boolean>) {
 
