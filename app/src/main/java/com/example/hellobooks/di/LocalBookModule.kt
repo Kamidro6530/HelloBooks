@@ -6,16 +6,22 @@ import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.repository.BookRepository
 import com.example.hellobooks.local.room.BookDao
 import com.example.hellobooks.local.room.BookDatabase
+import com.example.hellobooks.remote.BookServiceImpl
+import com.example.hellobooks.remote.BooksService
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.EntryPoint
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.ktor.client.*
+import io.ktor.client.engine.android.*
+import io.ktor.client.plugins.logging.*
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object BookModule {
+object LocalBookModule {
 
     @Singleton
     @Provides
@@ -29,8 +35,8 @@ object BookModule {
     }
     @Singleton
     @Provides
-    fun provideBookRepository(bookDao: BookDao) : BookRepository {
-        return BookRepository(bookDao)
+    fun provideBookRepository(bookDao: BookDao,booksService: BookServiceImpl) : BookRepository {
+        return BookRepository(bookDao,booksService)
     }
 
     @Singleton
@@ -38,4 +44,9 @@ object BookModule {
     fun provideConverters(): Converters {
         return Converters()
     }
+
+
+
+
+
 }

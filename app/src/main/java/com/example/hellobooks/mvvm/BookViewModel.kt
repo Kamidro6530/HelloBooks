@@ -22,7 +22,7 @@ class BookViewModel @Inject constructor( val bookRepository: BookRepository,val 
 
     init {
         viewModelScope.launch {
-           _listOfBooks.addAll( bookRepository.getAllBooks().await() )
+           _listOfBooks.addAll( bookRepository.getAllBooksFromDatabase().await() )
 
         }
     }
@@ -33,6 +33,10 @@ class BookViewModel @Inject constructor( val bookRepository: BookRepository,val 
 
     suspend  fun deleteBook(book: Book){
         viewModelScope.launch { bookRepository.deleteBook(book) }
+    }
+
+    suspend fun getBook() {
+        viewModelScope.launch{ bookRepository.getBook()}
     }
 
 
