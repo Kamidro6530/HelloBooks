@@ -1,5 +1,9 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SearchInfo(
-    val textSnippet: String
+    @SerializedName("textSnippet") val textSnippet: String?
 )

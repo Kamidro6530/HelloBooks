@@ -1,14 +1,18 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class AccessInfo(
-    val accessViewStatus: String,
-    val country: String,
-    val embeddable: Boolean,
-    val epub: Epub,
-    val pdf: Pdf,
-    val publicDomain: Boolean,
-    val quoteSharingAllowed: Boolean,
-    val textToSpeechPermission: String,
-    val viewability: String,
-    val webReaderLink: String
+    @SerializedName("accessViewStatus") val accessViewStatus: String?,
+    @SerializedName("country") val country: String?,
+    @SerializedName("embeddable") val embeddable: Boolean?,
+    @SerializedName("epub") val epub: Epub?,
+    @SerializedName("pdf") val pdf: Pdf?,
+    @SerializedName("publicDomain") val publicDomain: Boolean?,
+    @SerializedName("quoteSharingAllowed")  val quoteSharingAllowed: Boolean?,
+    @SerializedName("textToSpeechPermission") val textToSpeechPermission: String?,
+    @SerializedName("viewability") val viewability: String?,
+    @SerializedName("webReaderLink") val webReaderLink: String?
 )

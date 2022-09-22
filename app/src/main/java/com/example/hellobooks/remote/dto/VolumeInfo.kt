@@ -1,26 +1,30 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class VolumeInfo(
-    val allowAnonLogging: Boolean,
-    val authors: List<String>,
-    val averageRating: Int,
-    val canonicalVolumeLink: String,
-    val categories: List<String>,
-    val contentVersion: String,
-    val description: String,
-    val imageLinks: ImageLinks,
-    val industryIdentifiers: List<IndustryIdentifier>,
-    val infoLink: String,
-    val language: String,
-    val maturityRating: String,
-    val pageCount: Int,
-    val panelizationSummary: PanelizationSummary,
-    val previewLink: String,
-    val printType: String,
-    val publishedDate: String,
-    val publisher: String,
-    val ratingsCount: Int,
-    val readingModes: ReadingModes,
-    val subtitle: String,
-    val title: String
+  @SerializedName("allowAnonLogging")  val allowAnonLogging: Boolean?,
+  @SerializedName("authors")  val authors: List<String>?,
+  @SerializedName("averageRating")  val averageRating: Int?,
+  @SerializedName("canonicalVolumeLink")  val canonicalVolumeLink: String?,
+  @SerializedName("categories")  val categories: List<String>?,
+  @SerializedName("contentVersion")  val contentVersion: String?,
+  @SerializedName("description")  val description: String?,
+  @SerializedName("imageLinks")  val imageLinks: ImageLinks?,
+  @SerializedName("industryIdentifiers")  val industryIdentifiers: List<IndustryIdentifier>?,
+  @SerializedName("infoLink")  val infoLink: String?,
+  @SerializedName("language")  val language: String?,
+  @SerializedName("maturityRating")  val maturityRating: String?,
+  @SerializedName("pageCount")  val pageCount: Int?,
+  @SerializedName("panelizationSummary")  val panelizationSummary: PanelizationSummary?,
+  @SerializedName("previewLink")  val previewLink: String?,
+  @SerializedName("printType")  val printType: String?,
+  @SerializedName("publishedDate")  val publishedDate: String?,
+  @SerializedName("publisher")  val publisher: String?,
+  @SerializedName("ratingsCount")  val ratingsCount: Int?,
+  @SerializedName("readingModes")  val readingModes: ReadingModes?,
+  @SerializedName("subtitle")  val subtitle: String?,
+  @SerializedName("title")  val title: String?
 )

@@ -1,7 +1,11 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Epub(
-    val acsTokenLink: String,
-    val downloadLink: String,
-    val isAvailable: Boolean
+    @SerializedName("acsTokenLink") val acsTokenLink: String?,
+    @SerializedName("downloadLink")val downloadLink: String?,
+    @SerializedName("isAvailable")val isAvailable: Boolean?
 )

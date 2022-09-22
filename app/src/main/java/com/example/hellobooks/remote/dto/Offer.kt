@@ -1,7 +1,11 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Offer(
-    val finskyOfferType: Int,
-    val listPrice: ListPriceX,
-    val retailPrice: RetailPrice
+    @SerializedName("finskyOfferType") val finskyOfferType: Int?,
+    @SerializedName("listPrice") val listPrice: ListPriceX?,
+    @SerializedName("retailPrice") val retailPrice: RetailPrice?
 )

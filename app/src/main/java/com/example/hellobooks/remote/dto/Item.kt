@@ -1,12 +1,24 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Item(
-    val accessInfo: AccessInfo,
-    val etag: String,
-    val id: String,
-    val kind: String,
-    val saleInfo: SaleInfo,
-    val searchInfo: SearchInfo,
-    val selfLink: String,
-    val volumeInfo: VolumeInfo
+   @SerializedName("accessInfo")
+   val accessInfo: AccessInfo?,
+   @SerializedName("etag")
+   val etag: String?,
+   @SerializedName("id")
+   val id: String?,
+   @SerializedName("kind")
+   val kind: String?,
+   @SerializedName("saleInfo")
+   val saleInfo: SaleInfo?,
+   @SerializedName("searchInfo")
+   val searchInfo: SearchInfo?,
+   @SerializedName("selfLink")
+   val selfLink: String?,
+   @SerializedName("volumeInfo")
+    val volumeInfo: VolumeInfo?
 )

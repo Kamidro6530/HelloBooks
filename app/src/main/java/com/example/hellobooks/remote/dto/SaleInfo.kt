@@ -1,11 +1,15 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SaleInfo(
-    val buyLink: String,
-    val country: String,
-    val isEbook: Boolean,
-    val listPrice: ListPrice,
-    val offers: List<Offer>,
-    val retailPrice: RetailPriceX,
-    val saleability: String
+    @SerializedName("buyLink")val buyLink: String?,
+    @SerializedName("country")  val country: String?,
+    @SerializedName("isEbook") val isEbook: Boolean?,
+    @SerializedName("listPrice") val listPrice: ListPrice?,
+    @SerializedName("offers") val offers: List<Offer>?,
+    @SerializedName("retailPrice") val retailPrice: RetailPriceX?,
+    @SerializedName("saleability") val saleability: String?
 )

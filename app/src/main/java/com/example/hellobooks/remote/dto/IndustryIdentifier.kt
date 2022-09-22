@@ -1,6 +1,10 @@
 package com.example.hellobooks.remote.dto
 
+import com.google.gson.annotations.SerializedName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class IndustryIdentifier(
-    val identifier: String,
-    val type: String
+    @SerializedName("identifier")val identifier: String?,
+    @SerializedName("type")val type: String?
 )
