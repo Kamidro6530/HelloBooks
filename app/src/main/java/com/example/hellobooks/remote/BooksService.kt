@@ -6,7 +6,6 @@ import okhttp3.Call
 
 interface BooksService {
 
-
-    suspend fun getBooks() : Response
+    suspend fun getBooks(query_parameter: String) : Response
 
 }

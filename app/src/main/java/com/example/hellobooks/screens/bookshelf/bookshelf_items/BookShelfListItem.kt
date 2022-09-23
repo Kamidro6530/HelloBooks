@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -30,7 +31,7 @@ import com.example.hellobooks.ui.theme.roboto_fonts
 import java.net.URLDecoder
 import java.util.*
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun BookShelfListItem(book: Book) {
 
@@ -87,7 +88,7 @@ fun BookShelfListItem(book: Book) {
 
 
 @Composable
-fun ItemContent(book: Book) {
+fun ItemContent(book: Book?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
 
     Column(
@@ -116,13 +117,20 @@ fun ItemContent(book: Book) {
                             .size(height = 180.dp, width = 130.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        if (book.imageUri.toString() == "null") {
+                        if (book?.imageUri.toString() == "null") {
                             Image(
                                 painter = painterResource(id = R.drawable.picture_24),
                                 null,
                                 Modifier.size(30.dp)
                             )
-                        } else {
+                        } else if(book!!.imageUri.contains("http")) {
+                            Image(
+                                painter = rememberImagePainter(book.imageUri),
+                                null,
+                                Modifier.fillMaxSize()
+                            )
+                        }
+                        else {
                             Image(
                                 painter = rememberImagePainter(data = Uri.parse(Constants().galleryImagePath+ bookViewModel.converters.decodeUriKey(book.imageUri))),
                                 contentDescription = "",
@@ -141,24 +149,27 @@ fun ItemContent(book: Book) {
                     ) {
                         Row() {
                             Text(
-                                text = book.title, fontFamily = roboto_fonts,
+                                text = book?.title ?: "" , fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Black,
                                 color = primary,
-                                modifier = Modifier.padding(start = 90.dp),
-                                fontSize = 22.sp
+                                modifier = if (book?.title?.length !!> 15) {Modifier.padding(start = 30.dp)}else{Modifier.padding(start = 70.dp)},
+                                fontSize = 16.sp,
+                                maxLines = 3
                             )
                         }
-                        Row(Modifier.padding(top = 10.dp, bottom = 10.dp, start = 15.dp)) {
+                        Row(Modifier.padding(top = 14.dp, bottom = 10.dp, start = 15.dp)) {
                             Image(
                                 painter = painterResource(id = R.drawable.user_24),
                                 contentDescription = null,
                                 Modifier.size(20.dp)
                             )
                             Text(
-                                text = book.author, fontFamily = roboto_fonts,
+                                text = book?.author ?: "", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp),
+                                fontSize = 16.sp,
+                                maxLines = 2
                             )
                         }
 
@@ -169,10 +180,11 @@ fun ItemContent(book: Book) {
                                 Modifier.size(20.dp)
                             )
                             Text(
-                                text = book.publicationDate, fontFamily = roboto_fonts,
+                                text = book?.publicationDate ?: "", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp),
+                                fontSize = 16.sp
                             )
                         }
                         Row(Modifier.padding(top = 10.dp, start = 15.dp)) {
@@ -182,10 +194,11 @@ fun ItemContent(book: Book) {
                                 Modifier.size(20.dp)
                             )
                             Text(
-                                text = book.pages.toString(), fontFamily = roboto_fonts,
+                                text = book?.pages.toString(), fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Normal,
                                 color = primary,
-                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp)
+                                modifier = Modifier.padding(bottom = 4.dp, start = 10.dp),
+                                fontSize = 16.sp
                             )
                         }
                     }

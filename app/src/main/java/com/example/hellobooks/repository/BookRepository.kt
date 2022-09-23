@@ -5,6 +5,7 @@ import com.example.hellobooks.local.room.BookDao
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.remote.BooksService
 import com.example.hellobooks.remote.dto.Item
+import com.example.hellobooks.remote.dto.VolumeInfo
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -36,14 +37,10 @@ class BookRepository @Inject constructor(
             bookDao.getAllBooks()
         }
 
-    suspend fun getBook(): Flow<Item> {
+    suspend fun getBook(query_parameter: String): Flow<List<VolumeInfo?>?> {
         return flow {
-            val data = booksService.getBooks().items
-            data?.forEach {
-                emit(it)
-            }
-
-
+            val data = booksService.getBooks(query_parameter).items?.map { it.volumeInfo }
+            emit(data)
         }.flowOn(Dispatchers.IO)
     }
 

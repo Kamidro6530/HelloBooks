@@ -1,6 +1,7 @@
 package com.example.hellobooks.screens.book
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -22,8 +23,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.constants.Constants
-import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.local.room.book.Book
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.ui.theme.*
 
 
@@ -31,9 +32,9 @@ import com.example.hellobooks.ui.theme.*
 fun BookInformationScreen(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-
+    Log.d("tesa", "BookInformationScreen:$book ")
     val image =
-        Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book!!.imageUri)
+        Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book.imageUri)
     val scrollState = rememberScrollState()
     val mainInformationCardList = listOf(
         Pair(book.publicationDate, "Data publikacji"),
@@ -78,9 +79,9 @@ fun BookInformationScreen(jsonBook: String?) {
             Spacer(modifier = Modifier.height(5.dp))
 
             if (book.description != "")
-            DescriptionCard(book = book)
+                DescriptionCard(book = book)
 
-            if (mainInformationCardList.any { it.first != "" && it.first != "0"}) {
+            if (mainInformationCardList.any { it.first != "" && it.first != "0" }) {
                 Spacer(modifier = Modifier.height(5.dp))
                 InformationCard(list = mainInformationCardList)
             }
@@ -95,7 +96,6 @@ fun BookInformationScreen(jsonBook: String?) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainInformationCard(book: Book) {
     Card(
@@ -149,7 +149,7 @@ fun MainInformationCard(book: Book) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun DescriptionCard(book: Book) {
     Card(
@@ -167,10 +167,6 @@ fun DescriptionCard(book: Book) {
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(1f)
-                .blur(
-                    radius = 28.dp,
-                    edgeTreatment = BlurredEdgeTreatment.Unbounded
-                )
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
@@ -183,7 +179,6 @@ fun DescriptionCard(book: Book) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InformationCard(list: List<Pair<String, String>>) {
 
@@ -202,10 +197,6 @@ fun InformationCard(list: List<Pair<String, String>>) {
             modifier = Modifier
                 .fillMaxSize()
                 .alpha(1f)
-                .blur(
-                    radius = 28.dp,
-                    edgeTreatment = BlurredEdgeTreatment.Unbounded
-                )
 
 
         ) {

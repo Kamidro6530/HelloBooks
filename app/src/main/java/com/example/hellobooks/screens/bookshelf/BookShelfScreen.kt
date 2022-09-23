@@ -53,7 +53,6 @@ fun BookShelfScreen (navController: NavHostController) {
                                     )
                                 )
                             )
-                            Log.d("TEST", "BookShelfScreen: ${book.imageUri}")
                         })) {
                     BookShelfListItem(book = book)
 

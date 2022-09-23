@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.room.TypeConverter
 import com.example.hellobooks.local.room.book.Book
+import com.example.hellobooks.remote.dto.VolumeInfo
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 
@@ -16,17 +17,30 @@ class Converters {
         return outputStream.toByteArray()
     }
 
-   @TypeConverter
-    fun toBitmap(byteArray: ByteArray) : Bitmap
-    {
-        return BitmapFactory.decodeByteArray(byteArray,0,byteArray.size)
+    @TypeConverter
+    fun toBitmap(byteArray: ByteArray): Bitmap {
+        return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
     }
 
-    fun bookToJson(book: Book) : String?{
+    fun bookToJson(book: Book): String? {
 
         val gson = Gson()
-        val bookObject = book.apply{
-           Book(id, title, author, publicationDate, categories, pages, isbn, description, publisher, language,edition, subtitle, imageUri)
+        val bookObject = book.apply {
+            Book(
+                id,
+                title,
+                author,
+                publicationDate,
+                categories,
+                pages,
+                isbn,
+                description,
+                publisher,
+                language,
+                edition,
+                subtitle,
+                imageUri
+            )
         }
 
 
@@ -34,17 +48,36 @@ class Converters {
     }
 
 
-    fun jsonToBook(json : String?) : Book?{
+    fun jsonToBook(json: String?): Book {
 
         val gson = Gson()
         return gson.fromJson(json, Book::class.java)
     }
 
-    fun decodeUriKey(code : String): String {
-        return code.replace("+","%")
+    fun decodeUriKey(code: String): String {
+        return code.replace("+", "%")
     }
 
-    fun encodeUriKey(code : String?): String {
-        return code?.replace("%","+") ?: "null"
+    fun encodeUriKey(code: String?): String {
+        return code?.replace("%", "+") ?: "null"
     }
+
+    fun apiItemToBook(volumeInfo: VolumeInfo): Book =
+        Book().apply {
+            title = volumeInfo.title ?: ""
+            author = volumeInfo.authors?.joinToString("") ?: ""
+            publicationDate = volumeInfo.publishedDate ?: ""
+            categories = volumeInfo.categories?.joinToString("") ?: ""
+            pages = volumeInfo.pageCount ?: 0
+            isbn = ""
+            description = volumeInfo.description ?: ""
+            publisher = volumeInfo.publisher ?: ""
+            language = volumeInfo.language ?: ""
+            edition = ""
+            subtitle = volumeInfo.subtitle ?: ""
+            imageUri = volumeInfo.imageLinks?.thumbnail ?: ""
+        }
+
+
+
 }
