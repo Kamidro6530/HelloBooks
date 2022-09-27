@@ -33,7 +33,7 @@ fun BookInformationScreen(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
     val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
-
+    Log.d("tesa", "${book.imageUri} ")
     val scrollState = rememberScrollState()
     val mainInformationCardList = listOf(
         Pair(book.publicationDate, "Data publikacji"),
@@ -57,7 +57,7 @@ fun BookInformationScreen(jsonBook: String?) {
             Image(
                 painter =
                 if (book.imageUri.contains("http"))
-                    rememberImagePainter(data = book.imageUri)
+                    rememberImagePainter(data = book.imageUri.replace("5","0"))
                 else
                     rememberImagePainter(data = Uri.parse(imageFromGallery)),
                 contentDescription = "background",

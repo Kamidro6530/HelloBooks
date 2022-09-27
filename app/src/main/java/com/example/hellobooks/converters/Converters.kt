@@ -26,7 +26,7 @@ class Converters {
         val gson = Gson()
         //Method toJson have trouble with parse '?' char so I change this char to other
         book.description = book.description.replace('?', '`')
-        book.imageUri = book.imageUri.replace('?', '`').replace('/', '+')
+        book.imageUri = book.imageUri.replace('?', '`').replace('/', '^')
         return gson.toJson(book)
     }
 
@@ -34,7 +34,7 @@ class Converters {
     fun jsonToBook(json: String?): Book {
         val gson = Gson()
         //Method toJson have trouble with parse '?' char so I change this char to other
-        return gson.fromJson(json?.replace('`', '?')?.replace('+', '/'), Book::class.java)
+        return gson.fromJson(json?.replace('`', '?')?.replace('^', '/'), Book::class.java)
     }
 
     fun decodeUriKey(code: String): String {
