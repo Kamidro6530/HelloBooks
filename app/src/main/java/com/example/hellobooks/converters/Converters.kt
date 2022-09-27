@@ -23,35 +23,18 @@ class Converters {
     }
 
     fun bookToJson(book: Book): String? {
-
         val gson = Gson()
-        val bookObject = book.apply {
-            Book(
-                id,
-                title,
-                author,
-                publicationDate,
-                categories,
-                pages,
-                isbn,
-                description,
-                publisher,
-                language,
-                edition,
-                subtitle,
-                imageUri
-            )
-        }
-
-
-        return gson.toJson(bookObject)
+        //Method toJson have trouble with parse '?' char so I change this char to other
+        book.description = book.description.replace('?', '`')
+        book.imageUri = book.imageUri.replace('?', '`').replace('/', '+')
+        return gson.toJson(book)
     }
 
 
     fun jsonToBook(json: String?): Book {
-
         val gson = Gson()
-        return gson.fromJson(json, Book::class.java)
+        //Method toJson have trouble with parse '?' char so I change this char to other
+        return gson.fromJson(json?.replace('`', '?')?.replace('+', '/'), Book::class.java)
     }
 
     fun decodeUriKey(code: String): String {
@@ -77,7 +60,6 @@ class Converters {
             subtitle = volumeInfo.subtitle ?: ""
             imageUri = volumeInfo.imageLinks?.thumbnail ?: ""
         }
-
 
 
 }

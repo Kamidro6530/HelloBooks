@@ -32,9 +32,8 @@ import com.example.hellobooks.ui.theme.*
 fun BookInformationScreen(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-    Log.d("tesa", "BookInformationScreen:$book ")
-    val image =
-        Constants().galleryImagePath + bookViewModel.converters.decodeUriKey(book.imageUri)
+    val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
+
     val scrollState = rememberScrollState()
     val mainInformationCardList = listOf(
         Pair(book.publicationDate, "Data publikacji"),
@@ -56,7 +55,11 @@ fun BookInformationScreen(jsonBook: String?) {
             Modifier.background(background)
         } else {
             Image(
-                painter = rememberImagePainter(data = Uri.parse(image)),
+                painter =
+                if (book.imageUri.contains("http"))
+                    rememberImagePainter(data = book.imageUri)
+                else
+                    rememberImagePainter(data = Uri.parse(imageFromGallery)),
                 contentDescription = "background",
                 Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop,
@@ -101,7 +104,7 @@ fun MainInformationCard(book: Book) {
     Card(
         modifier = Modifier
             .width(330.dp)
-            .height(125.dp)
+            .wrapContentHeight()
             .padding(vertical = 8.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(

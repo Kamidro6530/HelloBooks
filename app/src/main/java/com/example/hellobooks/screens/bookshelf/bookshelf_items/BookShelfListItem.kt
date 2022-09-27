@@ -1,7 +1,6 @@
 package com.example.hellobooks.screens.bookshelf
 
 import android.net.Uri
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -13,7 +12,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,14 +20,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
 import com.example.hellobooks.constants.Constants
-import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.local.room.book.Book
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.deleteItemColor
 import com.example.hellobooks.ui.theme.primary
 import com.example.hellobooks.ui.theme.roboto_fonts
-import java.net.URLDecoder
-import java.util.*
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -132,7 +128,7 @@ fun ItemContent(book: Book?) {
                         }
                         else {
                             Image(
-                                painter = rememberImagePainter(data = Uri.parse(Constants().galleryImagePath+ bookViewModel.converters.decodeUriKey(book.imageUri))),
+                                painter = rememberImagePainter(data = Uri.parse(Constants.GALLERY_IMAGE_PATH+ bookViewModel.converters.decodeUriKey(book.imageUri))),
                                 contentDescription = "",
                                 Modifier.size(height = 200.dp, width = 150.dp)
                             )

@@ -1,7 +1,6 @@
 package com.example.hellobooks.constants
 
-class Constants {
+object Constants {
 
-    var galleryImagePath = "content://com.android.providers.media.documents/document/image"
-
+    const val  GALLERY_IMAGE_PATH = "content://com.android.providers.media.documents/document/image"
 }

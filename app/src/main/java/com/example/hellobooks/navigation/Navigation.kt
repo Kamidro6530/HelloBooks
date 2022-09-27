@@ -32,7 +32,7 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             }
             composable(Routes.FindBookScreen.route) {
                 bottomBarVisibilityState.value = true
-                FindBookScreen()
+                FindBookScreen(navController)
             }
             composable(Routes.StatisticsScreen.route) {
                 bottomBarVisibilityState.value = true
