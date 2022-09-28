@@ -2,7 +2,6 @@ package com.example.hellobooks.screens
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -28,37 +27,37 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
 import com.example.hellobooks.R
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
-import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.serialization.builtins.serializer
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNewBookScreen(navController : NavHostController) {
+fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
-
+    //If user coming from BottomBar text fields are empty
+    val book = if (jsonBook!="{book}") bookViewModel.converters.jsonToBook(jsonBook) else Book()
     //Book parameters
-    var title by remember { mutableStateOf(TextFieldValue("")) }
-    var author by remember { mutableStateOf(TextFieldValue("")) }
-    var publicationDate by remember { mutableStateOf(TextFieldValue("")) }
-    var pages by remember { mutableStateOf(TextFieldValue("0")) }
-    var categories by remember { mutableStateOf(TextFieldValue("")) }
-    var isbn by remember { mutableStateOf(TextFieldValue("")) }
-    var description by remember { mutableStateOf(TextFieldValue("")) }
+    var title by remember { mutableStateOf(TextFieldValue(book.title)) }
+    var author by remember { mutableStateOf(TextFieldValue(book.author)) }
+    var publicationDate by remember { mutableStateOf(TextFieldValue(book.publicationDate)) }
+    var pages by remember { mutableStateOf(TextFieldValue(book.pages.toString())) }
+    var categories by remember { mutableStateOf(TextFieldValue(book.categories)) }
+    var isbn by remember { mutableStateOf(TextFieldValue(book.isbn)) }
+    var description by remember { mutableStateOf(TextFieldValue(book.description)) }
     //Other options
-    var publisher by remember { mutableStateOf(TextFieldValue("")) }
-    var language by remember { mutableStateOf(TextFieldValue("")) }
-    var edition by remember { mutableStateOf(TextFieldValue("")) }
-    var subtitle by remember { mutableStateOf(TextFieldValue("")) }
+    var publisher by remember { mutableStateOf(TextFieldValue(book.publisher)) }
+    var language by remember { mutableStateOf(TextFieldValue(book.language)) }
+    var edition by remember { mutableStateOf(TextFieldValue(book.edition)) }
+    var subtitle by remember { mutableStateOf(TextFieldValue(book.subtitle)) }
     //Image
-    var imageUri by remember { mutableStateOf<Uri?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(Uri.parse(book.imageUri)) }
 
 
     val scrollState = rememberScrollState()
@@ -560,7 +559,6 @@ fun AddNewBookScreen(navController : NavHostController) {
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
                         //Get only unique value from uri and insert to database(not able to send full uri for navigation)
-
                             val uniqueKey = imageUri?.toString()?.split("/image")
                         bookViewModel.insertBook(
                             Book(
@@ -576,7 +574,11 @@ fun AddNewBookScreen(navController : NavHostController) {
                                 language.text,
                                 edition.text,
                                 subtitle.text,
-                                bookViewModel.converters.encodeUriKey(uniqueKey?.get(1))   // Image
+                                // Image
+                                if (uniqueKey?.size != 1)
+                                bookViewModel.converters.encodeUriKey(uniqueKey?.get(1))
+                                else
+                                    imageUri.toString()
                             )
                         )
                     }

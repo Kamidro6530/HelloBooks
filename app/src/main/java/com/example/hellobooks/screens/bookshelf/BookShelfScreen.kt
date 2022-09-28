@@ -1,5 +1,6 @@
 package com.example.hellobooks.screens
 
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,10 +19,9 @@ import com.example.hellobooks.screens.bookshelf.bookshelf_items.EmptyListBookShe
 import com.example.hellobooks.ui.theme.background
 
 @Composable
-fun BookShelfScreen (navController: NavHostController) {
+fun BookShelfScreen(navController: NavHostController) {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
-
 
     LazyColumn(
         state = rememberLazyListState(),
@@ -42,9 +42,10 @@ fun BookShelfScreen (navController: NavHostController) {
                                     bookViewModel.converters.bookToJson(book)
                                 )
                             )
-                        })) {
-                    BookShelfListItem(book = book)
-               }
+                        })
+                ) {
+                    BookShelfListItem(jsonBook = bookViewModel.converters.bookToJson(book))
+                }
                 Row() {
 
                     Spacer(

@@ -22,12 +22,12 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hellobooks.R
-import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.local.room.book.Book
+import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.ui.theme.*
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
 
@@ -97,7 +97,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
                         horizontalArrangement = Arrangement.SpaceAround
                     ) {
 
-                        androidx.compose.material3.TextButton(onClick = {
+                        TextButton(onClick = {
 
                             scope.launch {
                                 dismissState.reset()
@@ -105,7 +105,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
                             openDialog.value = false
                         }) {
 
-                            androidx.compose.material3.Text(
+                            Text(
                                 "Nie chce usuwać",
                                 fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Medium,
@@ -115,7 +115,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
                         }
 
 
-                        androidx.compose.material3.TextButton(onClick = {
+                        TextButton(onClick = {
                             openDialog.value = false
                             bookViewModel.listOfBooks.remove(book)
                             scope.launch {
@@ -123,7 +123,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
                                 dismissState.reset()
                             }
                         }) {
-                            androidx.compose.material3.Text(
+                            Text(
                                 "Tak chcę usunąć",
                                 fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Bold,

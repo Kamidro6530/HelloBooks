@@ -1,39 +1,42 @@
 package com.example.hellobooks.screens.book
 
 import android.net.Uri
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.BlurredEdgeTreatment
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import coil.compose.rememberImagePainter
+import com.example.hellobooks.R
 import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.mvvm.BookViewModel
+import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.ui.theme.*
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookInformationScreen(jsonBook: String?) {
+fun BookInformationScreen(jsonBook: String?, navController: NavHostController) {
+
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-    val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
-    Log.d("tesa", "${book.imageUri} ")
+
+    val imageFromGallery =
+        Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
+
     val scrollState = rememberScrollState()
     val mainInformationCardList = listOf(
         Pair(book.publicationDate, "Data publikacji"),
@@ -41,6 +44,7 @@ fun BookInformationScreen(jsonBook: String?) {
         Pair(book.pages.toString(), "Liczba stron"),
         Pair(book.isbn, "Kod ISBN")
     )
+
     val additionalInformationCardList = listOf(
         Pair(book.publisher, "Wydawca"),
         Pair(book.language, "Język"),
@@ -48,8 +52,7 @@ fun BookInformationScreen(jsonBook: String?) {
         Pair(book.subtitle, "Podtytuł")
     )
 
-    Box(
-    ) {
+    Box(contentAlignment = Alignment.TopEnd) {
 
         if (book.imageUri == "null") {
             Modifier.background(background)
@@ -57,7 +60,7 @@ fun BookInformationScreen(jsonBook: String?) {
             Image(
                 painter =
                 if (book.imageUri.contains("http"))
-                    rememberImagePainter(data = book.imageUri.replace("5","0"))
+                    rememberImagePainter(data = book.imageUri.replace("1", "0"))
                 else
                     rememberImagePainter(data = Uri.parse(imageFromGallery)),
                 contentDescription = "background",
@@ -67,13 +70,17 @@ fun BookInformationScreen(jsonBook: String?) {
         }
 
 
+
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState),
+                .verticalScroll(scrollState)
+                .padding(top = 100.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
+
 
             Spacer(modifier = Modifier.height(200.dp))
 
@@ -94,6 +101,21 @@ fun BookInformationScreen(jsonBook: String?) {
                 InformationCard(list = additionalInformationCardList)
             }
 
+
+        }
+
+        //Column with options buttons
+        OutlinedIconButton(onClick = {
+            navController.navigate(
+                Routes.AddNewBookScreen.withArgs(
+                    jsonBook
+                )
+            )
+        }, border = BorderStroke(0.dp, color = Color.Transparent)) {
+            Icon(
+                painter = painterResource(id = R.drawable.add_24),
+                contentDescription = "Add book button"
+            )
 
         }
     }

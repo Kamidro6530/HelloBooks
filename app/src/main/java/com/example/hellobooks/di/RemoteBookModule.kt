@@ -7,8 +7,6 @@ import dagger.hilt.components.SingletonComponent
 import io.ktor.client.*
 import io.ktor.client.engine.android.*
 import io.ktor.client.plugins.*
-import io.ktor.client.plugins.auth.*
-import io.ktor.client.plugins.auth.providers.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
@@ -31,7 +29,6 @@ object RemoteBookModule {
                 level = LogLevel.ALL
             }
 
-
             install(ContentNegotiation) {
                 json(Json {
                     prettyPrint = true
@@ -39,8 +36,6 @@ object RemoteBookModule {
                     ignoreUnknownKeys = true
                     explicitNulls = false
                 })
-
-
             }
 
             defaultRequest {

@@ -17,41 +17,51 @@ import com.example.hellobooks.screens.book.BookInformationScreen
 @Composable
 fun Navigation(navController: NavHostController, bottomBarVisibilityState: MutableState<Boolean>) {
 
-        NavHost(
-            navController = navController,
-            startDestination = Routes.BookShelfScreen.route
-        ) {
+    NavHost(
+        navController = navController,
+        startDestination = Routes.BookShelfScreen.route
+    ) {
 
-            composable(Routes.BookShelfScreen.route) {
-                bottomBarVisibilityState.value = true
-                BookShelfScreen(navController)
-            }
-            composable(Routes.AddNewBookScreen.route) {
-                bottomBarVisibilityState.value = false
-                AddNewBookScreen(navController)
-            }
-            composable(Routes.FindBookScreen.route) {
-                bottomBarVisibilityState.value = true
-                FindBookScreen(navController)
-            }
-            composable(Routes.StatisticsScreen.route) {
-                bottomBarVisibilityState.value = true
-                StatisticsScreen()
-            }
-            composable(Routes.WishListScreen.route) {
-                bottomBarVisibilityState.value = true
-                WishListScreen()
-            }
-            composable(Routes.BookInformationScreen.route + "/{book}",
-                arguments = listOf(
-                    navArgument("book"){},
-                )){ entry ->
-                bottomBarVisibilityState.value = false
-                BookInformationScreen(
-                    jsonBook = entry.arguments?.getString("book"),
-                    )
-            }
-
-
+        composable(Routes.BookShelfScreen.route) {
+            bottomBarVisibilityState.value = true
+            BookShelfScreen(navController)
         }
+        composable(
+            Routes.AddNewBookScreen.route + "/{book}",
+            arguments = listOf(
+                navArgument("book") {},
+            )
+        ) { entry ->
+            bottomBarVisibilityState.value = false
+            AddNewBookScreen(
+                navController = navController,
+                jsonBook = entry.arguments?.getString("book"))
+        }
+        composable(Routes.FindBookScreen.route) {
+            bottomBarVisibilityState.value = true
+            FindBookScreen(navController)
+        }
+        composable(Routes.StatisticsScreen.route) {
+            bottomBarVisibilityState.value = true
+            StatisticsScreen()
+        }
+        composable(Routes.WishListScreen.route) {
+            bottomBarVisibilityState.value = true
+            WishListScreen()
+        }
+        composable(
+            Routes.BookInformationScreen.route + "/{book}",
+            arguments = listOf(
+                navArgument("book") {},
+            )
+        ) { entry ->
+            bottomBarVisibilityState.value = false
+            BookInformationScreen(
+                jsonBook = entry.arguments?.getString("book"),
+                navController = navController
+            )
+        }
+
+
+    }
 }

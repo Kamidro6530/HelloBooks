@@ -29,8 +29,9 @@ import com.example.hellobooks.ui.theme.roboto_fonts
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun BookShelfListItem(book: Book) {
-
+fun BookShelfListItem(jsonBook: String?) {
+    val bookViewModel = hiltViewModel<BookViewModel>()
+    val book = bookViewModel.converters.jsonToBook(jsonBook)
     val dismissState =
         rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = { true })
 
@@ -119,16 +120,21 @@ fun ItemContent(book: Book?) {
                                 null,
                                 Modifier.size(30.dp)
                             )
-                        } else if(book!!.imageUri.contains("http")) {
+                        } else if (book!!.imageUri.contains("http")) {
                             Image(
                                 painter = rememberImagePainter(book.imageUri),
                                 null,
-                                Modifier.fillMaxSize()
+                                Modifier.size(height = 200.dp, width = 150.dp)
                             )
-                        }
-                        else {
+                        } else {
                             Image(
-                                painter = rememberImagePainter(data = Uri.parse(Constants.GALLERY_IMAGE_PATH+ bookViewModel.converters.decodeUriKey(book.imageUri))),
+                                painter = rememberImagePainter(
+                                    data = Uri.parse(
+                                        Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(
+                                            book.imageUri
+                                        )
+                                    )
+                                ),
                                 contentDescription = "",
                                 Modifier.size(height = 200.dp, width = 150.dp)
                             )
@@ -145,10 +151,14 @@ fun ItemContent(book: Book?) {
                     ) {
                         Row() {
                             Text(
-                                text = book?.title ?: "" , fontFamily = roboto_fonts,
+                                text = book?.title ?: "", fontFamily = roboto_fonts,
                                 fontWeight = FontWeight.Black,
                                 color = primary,
-                                modifier = if (book?.title?.length !!> 15) {Modifier.padding(start = 30.dp)}else{Modifier.padding(start = 70.dp)},
+                                modifier = if (book?.title?.length!! > 15) {
+                                    Modifier.padding(start = 30.dp)
+                                } else {
+                                    Modifier.padding(start = 70.dp)
+                                },
                                 fontSize = 16.sp,
                                 maxLines = 3
                             )
