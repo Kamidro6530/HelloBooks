@@ -50,15 +50,18 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             WishListScreen()
         }
         composable(
-            Routes.BookInformationScreen.route + "/{book}",
+            Routes.BookInformationScreen.route + "/{book}" + "/{route}",
             arguments = listOf(
                 navArgument("book") {},
+                navArgument("route") {}
             )
         ) { entry ->
             bottomBarVisibilityState.value = false
             BookInformationScreen(
                 jsonBook = entry.arguments?.getString("book"),
-                navController = navController
+                navController = navController,
+                route = entry.arguments?.getString("route")
+
             )
         }
 

@@ -29,7 +29,7 @@ import com.example.hellobooks.ui.theme.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookInformationScreen(jsonBook: String?, navController: NavHostController) {
+fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?) {
 
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
@@ -105,19 +105,22 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController) {
         }
 
         //Column with options buttons
-        OutlinedIconButton(onClick = {
-            navController.navigate(
-                Routes.AddNewBookScreen.withArgs(
-                    jsonBook
+        if(route != Routes.BookShelfScreen.route) {
+            OutlinedIconButton(onClick = {
+                navController.navigate(
+                    Routes.AddNewBookScreen.withArgs(
+                        jsonBook
+                    )
                 )
-            )
-        }, border = BorderStroke(0.dp, color = Color.Transparent)) {
-            Icon(
-                painter = painterResource(id = R.drawable.add_24),
-                contentDescription = "Add book button"
-            )
+            }, border = BorderStroke(0.dp, color = Color.Transparent)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.add_24),
+                    contentDescription = "Add book button"
+                )
 
+            }
         }
+
     }
 }
 

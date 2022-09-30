@@ -39,8 +39,9 @@ fun BookShelfScreen(navController: NavHostController) {
                         .clickable(onClick = {
                             navController.navigate(
                                 Routes.BookInformationScreen.withArgs(
-                                    bookViewModel.converters.bookToJson(book)
-                                )
+                                    bookViewModel.converters.bookToJson(book),
+                                    Routes.BookShelfScreen.route
+                                ),
                             )
                         })
                 ) {
