@@ -22,7 +22,9 @@ data class Book(
     @ColumnInfo(name = "subtitle") var subtitle: String = "",
     //Image
     @ColumnInfo(name = "image") var imageUri: String = "",
-
+    //The book has been added to wish list
+    @ColumnInfo(name = "wishList") var wishList : Boolean = false,
+    @ColumnInfo(name = "apiId") var apiId : String? = ""
 
 
     )

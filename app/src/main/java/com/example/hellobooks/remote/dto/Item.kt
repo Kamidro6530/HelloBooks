@@ -7,10 +7,11 @@ import kotlinx.serialization.Serializable
 data class Item(
   // @SerializedName("accessInfo")
   // val accessInfo: AccessInfo?,
-  // @SerializedName("etag")
-  // val etag: String?,
-  // @SerializedName("id")
-  // val id: String?,
+    // @SerializedName("etag")
+   //val etag: String?,
+    //Item identifier required to  know whether the item has been added from the Api or not
+   @SerializedName("id")
+   val id: String?,
    //@SerializedName("kind")
   // val kind: String?,
   // @SerializedName("saleInfo")

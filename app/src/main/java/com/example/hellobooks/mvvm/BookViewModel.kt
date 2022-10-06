@@ -1,6 +1,7 @@
 package com.example.hellobooks.mvvm
 
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hellobooks.converters.Converters
@@ -21,7 +22,7 @@ class BookViewModel @Inject constructor(
     private var _listOfBooks = mutableStateListOf<Book>()
     val listOfBooks = _listOfBooks
 
-    private var _searchBarResultsList = MutableStateFlow(listOf<VolumeInfo?>())
+    private var _searchBarResultsList = MutableStateFlow(listOf<Book?>())
     val searchBarResultsList = _searchBarResultsList
 
 
@@ -31,6 +32,8 @@ class BookViewModel @Inject constructor(
 
         }
     }
+
+
 
     fun insertBook(book: Book) {
         viewModelScope.launch { bookRepository.insertBook(book) }

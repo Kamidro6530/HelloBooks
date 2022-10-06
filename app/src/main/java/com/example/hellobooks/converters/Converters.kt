@@ -25,6 +25,7 @@ class Converters {
     fun bookToJson(book: Book): String? {
         val gson = Gson()
         //Method toJson have trouble with parse '?' char so I change this char to other
+        book.apiId = book.apiId?.replace('/', '^')
         book.description = book.description.replace('?', '`')
         book.imageUri = book.imageUri.replace('?', '`').replace('/', '^')
         return gson.toJson(book)
@@ -45,7 +46,7 @@ class Converters {
         return code?.replace("%", "+") ?: "null"
     }
 
-    fun apiItemToBook(volumeInfo: VolumeInfo): Book =
+    fun apiItemToBook(volumeInfo: VolumeInfo,apiItemID : String= "" ): Book =
         Book().apply {
             title = volumeInfo.title ?: ""
             author = volumeInfo.authors?.joinToString("") ?: ""
@@ -59,6 +60,8 @@ class Converters {
             edition = ""
             subtitle = volumeInfo.subtitle ?: ""
             imageUri = volumeInfo.imageLinks?.thumbnail ?: ""
+            wishList = false
+            apiId = apiItemID
         }
 
 

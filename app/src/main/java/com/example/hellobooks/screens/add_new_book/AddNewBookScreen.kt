@@ -562,7 +562,7 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
                             val uniqueKey = imageUri?.toString()?.split("/image")
                         bookViewModel.insertBook(
                             Book(
-                                0,
+                                book.id,
                                 title.text,
                                 author.text,
                                 publicationDate.text,

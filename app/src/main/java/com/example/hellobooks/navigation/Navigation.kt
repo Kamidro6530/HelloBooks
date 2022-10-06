@@ -47,7 +47,7 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
         }
         composable(Routes.WishListScreen.route) {
             bottomBarVisibilityState.value = true
-            WishListScreen()
+            WishListScreen(navController)
         }
         composable(
             Routes.BookInformationScreen.route + "/{book}" + "/{route}",

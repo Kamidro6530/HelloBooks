@@ -3,7 +3,6 @@ package com.example.hellobooks.repository
 import com.example.hellobooks.local.room.BookDao
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.remote.BooksService
-import com.example.hellobooks.remote.dto.VolumeInfo
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -35,9 +34,26 @@ class BookRepository @Inject constructor(
             bookDao.getAllBooks()
         }
 
-    suspend fun getBook(query_parameter: String): Flow<List<VolumeInfo?>?> {
+    suspend fun getBook(query_parameter: String): Flow<List<Book>?> {
         return flow {
-            val data = booksService.getBooks(query_parameter).items?.map { it.volumeInfo }
+            val data = booksService.getBooks(query_parameter).items?.map { Book().apply {
+                val book = it.volumeInfo
+                title = book?.title ?: ""
+                author = book?.authors?.joinToString("") ?: ""
+                publicationDate = book?.publishedDate ?: ""
+                categories = book?.categories?.joinToString("") ?: ""
+                pages = book?.pageCount ?: 0
+                isbn = ""
+                description = book?.description ?: ""
+                publisher = book?.publisher ?: ""
+                language = book?.language ?: ""
+                edition = ""
+                subtitle = book?.subtitle ?: ""
+                imageUri = book?.imageLinks?.thumbnail ?: ""
+                wishList = false
+                apiId = it.id
+            } }
+
             emit(data)
         }.flowOn(Dispatchers.IO)
     }

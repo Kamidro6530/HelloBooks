@@ -58,14 +58,14 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
             Row(Modifier.clickable {
                 navController.navigate(
                     Routes.BookInformationScreen.withArgs(
-                        bookViewModel.converters.bookToJson(bookViewModel.converters.apiItemToBook(book!!)),
+                        bookViewModel.converters.bookToJson(book!!),
                         Routes.FindBookScreen.route
                     )
                 )
 
             }) {
 
-                ItemContent(book = bookViewModel.converters.apiItemToBook(book!!))
+                ItemContent(book = book!!)
             }
         }
     }

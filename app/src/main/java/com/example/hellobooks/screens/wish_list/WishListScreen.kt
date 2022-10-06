@@ -1,6 +1,5 @@
 package com.example.hellobooks.screens
 
-
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,32 +7,35 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
 import com.example.hellobooks.screens.bookshelf.bookshelf_items.EmptyListBookShelfItem
+import com.example.hellobooks.screens.wish_list.EmptyWishListItem
 import com.example.hellobooks.ui.theme.background
 
 @Composable
-fun BookShelfScreen(navController: NavHostController) {
-
+fun WishListScreen(navController: NavHostController) {
     val bookViewModel = hiltViewModel<BookViewModel>()
+    val wishListOfBooks = bookViewModel.listOfBooks.filter { it.wishList == true }
 
     LazyColumn(
         state = rememberLazyListState(),
         modifier = Modifier.fillMaxSize()
     ) {
-        if (bookViewModel.listOfBooks.isEmpty()) {
+        if (wishListOfBooks.isEmpty()) {
             item {
-                EmptyListBookShelfItem()
+                EmptyWishListItem()
             }
         } else {
-            items(bookViewModel.listOfBooks.filter { it.wishList == false }) { book ->
+            items(wishListOfBooks) { book ->
                 Row(
                     Modifier
                         .wrapContentHeight()
@@ -41,7 +43,7 @@ fun BookShelfScreen(navController: NavHostController) {
                             navController.navigate(
                                 Routes.BookInformationScreen.withArgs(
                                     bookViewModel.converters.bookToJson(book),
-                                    Routes.BookShelfScreen.route
+                                    Routes.WishListScreen.route
                                 ),
                             )
                         })
@@ -64,5 +66,4 @@ fun BookShelfScreen(navController: NavHostController) {
 
         }
     }
-
 }
