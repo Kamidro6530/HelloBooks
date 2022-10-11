@@ -46,7 +46,7 @@ fun FindBookScreen(navController: NavHostController) {
 
 @Composable
 fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) {
-    val books = bookViewModel.searchBarResultsList.collectAsState()
+    val books = bookViewModel.searchBarResultsList.value
 
     LazyColumn(
         state = rememberLazyListState(),
@@ -54,18 +54,18 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
             .fillMaxWidth()
             .wrapContentHeight()
     ) {
-        items(books.value) { book ->
+        items(books) { book ->
             Row(Modifier.clickable {
                 navController.navigate(
                     Routes.BookInformationScreen.withArgs(
-                        bookViewModel.converters.bookToJson(book!!),
+                        bookViewModel.converters.bookToJson(book),
                         Routes.FindBookScreen.route
                     )
                 )
 
             }) {
 
-                ItemContent(book = book!!)
+                ItemContent(book = book)
             }
         }
     }

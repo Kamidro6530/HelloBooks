@@ -9,30 +9,22 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 import javax.inject.Singleton
-
 @Singleton
 class BookRepository @Inject constructor(
     private val bookDao: BookDao,
     private val booksService: BooksService
 ) {
 
-    fun insertBook(book: Book) {
-        CoroutineScope(Dispatchers.IO).launch {
-            bookDao.insertBook(book)
+    fun insertBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {bookDao.insertBook(book) }
 
-        }
-    }
 
-    fun deleteBook(book: Book) {
-        CoroutineScope(Dispatchers.IO).launch {
-            bookDao.deleteBook(book)
-        }
-    }
+    fun deleteBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {  bookDao.deleteBook(book) }
 
-    suspend fun getAllBooksFromDatabase(): Deferred<List<Book>> =
-        CoroutineScope(Dispatchers.IO).async {
-            bookDao.getAllBooks()
-        }
+
+
+     fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooks()
+
+
 
     suspend fun getBook(query_parameter: String): Flow<List<Book>?> {
         return flow {
@@ -60,3 +52,4 @@ class BookRepository @Inject constructor(
 
 
 }
+

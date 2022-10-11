@@ -7,10 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.DismissState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -75,7 +72,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
                             fontFamily = roboto_fonts,
                             fontWeight = FontWeight.Bold,
                             fontSize = 18.sp
-                            // overflow = TextOverflow.Ellipsis
+
                         )
                         Text(
                             text = "Odwrócenie zmian nie będzie już możliwe",
@@ -116,11 +113,10 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
 
 
                         TextButton(onClick = {
-                            openDialog.value = false
-                            bookViewModel.listOfBooks.remove(book)
                             scope.launch {
                                 bookViewModel.deleteBook(book)
                                 dismissState.reset()
+                                openDialog.value = false
                             }
                         }) {
                             Text(

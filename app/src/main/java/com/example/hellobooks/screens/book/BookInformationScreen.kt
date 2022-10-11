@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -33,7 +34,7 @@ import com.example.hellobooks.ui.theme.*
 fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-    Log.d("pudzia", "WishListScreen: ${book.apiId} ")
+    
 
     val imageFromGallery =
         Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
@@ -107,7 +108,7 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
 
         //Column with options buttons
         if (route != Routes.BookShelfScreen.route) {
-            Column() {
+            Column {
 
 
                 OutlinedIconButton(onClick = {
@@ -123,7 +124,7 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
                     )
 
                 }
-                val wishListOfBooks = bookViewModel.listOfBooks.filter { it.wishList == true }
+                val wishListOfBooks = bookViewModel.listOfBooks.value.filter { it.wishList == true }
 
                 OutlinedIconButton(onClick = {
                     if (wishListOfBooks.any { wishListBook -> wishListBook.apiId == book.apiId })

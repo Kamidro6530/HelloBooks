@@ -9,11 +9,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
+import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
@@ -24,7 +26,7 @@ import com.example.hellobooks.ui.theme.background
 @Composable
 fun WishListScreen(navController: NavHostController) {
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val wishListOfBooks = bookViewModel.listOfBooks.filter { it.wishList == true }
+    val wishListOfBooks = bookViewModel.listOfBooks.value.filter { it.wishList == true  }
 
     LazyColumn(
         state = rememberLazyListState(),
