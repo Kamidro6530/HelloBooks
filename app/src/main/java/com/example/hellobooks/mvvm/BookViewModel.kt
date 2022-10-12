@@ -1,17 +1,13 @@
 package com.example.hellobooks.mvvm
 
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.local.room.book.Book
-import com.example.hellobooks.remote.dto.VolumeInfo
 import com.example.hellobooks.repository.BookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,8 +17,11 @@ class BookViewModel @Inject constructor(
     val converters: Converters
 ) : ViewModel() {
 
-    private var _listOfBooks : MutableState<List<Book>> = mutableStateOf(ArrayList())
-    val listOfBooks = _listOfBooks
+    private var _listOfBooksForBookshelf : MutableState<List<Book>> = mutableStateOf(ArrayList())
+    val listOfBooksForBookshelf = _listOfBooksForBookshelf
+
+    private var _listOfBooksForWishList : MutableState<List<Book>> = mutableStateOf(ArrayList())
+    val listOfBooksForWishList = _listOfBooksForWishList
 
     private var _searchBarResultsList : MutableState<List<Book>> = mutableStateOf(ArrayList())
     val searchBarResultsList = _searchBarResultsList
@@ -30,10 +29,10 @@ class BookViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            bookRepository.getAllBooksFromDatabase().collect{ listOfBooksFromDatabse ->
-                _listOfBooks.value = listOfBooksFromDatabse
+            bookRepository.getAllBooksFromDatabase().collect {
+                _listOfBooksForBookshelf.value = it.filter { it.wishList == false }
+                _listOfBooksForWishList.value = it.filter { it.wishList == true }
             }
-
         }
     }
 

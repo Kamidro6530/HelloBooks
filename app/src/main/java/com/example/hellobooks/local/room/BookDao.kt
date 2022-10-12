@@ -10,12 +10,11 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BookDao {
 
-
-    @Query("SELECT * FROM Book ")
-     fun getAllBooks() : Flow<List<Book>>
+    @Query("SELECT * FROM Book")
+    fun getAllBooksFromDatabase(): Flow<List<Book>>
 
     @Insert
-    fun insertBook( book : Book)
+    fun insertBook(book: Book)
 
     @Delete
     fun deleteBook(book: Book)

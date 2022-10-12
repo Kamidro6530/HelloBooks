@@ -3,27 +3,27 @@ package com.example.hellobooks.repository
 import com.example.hellobooks.local.room.BookDao
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.remote.BooksService
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
+
 @Singleton
 class BookRepository @Inject constructor(
     private val bookDao: BookDao,
     private val booksService: BooksService
 ) {
 
-    fun insertBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {bookDao.insertBook(book) }
+    fun insertBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {bookDao.insertBook(book)}
 
 
     fun deleteBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {  bookDao.deleteBook(book) }
 
-
-
-     fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooks()
-
+    fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooksFromDatabase()
 
 
     suspend fun getBook(query_parameter: String): Flow<List<Book>?> {
@@ -42,7 +42,7 @@ class BookRepository @Inject constructor(
                 edition = ""
                 subtitle = book?.subtitle ?: ""
                 imageUri = book?.imageLinks?.thumbnail ?: ""
-                wishList = false
+                wishList = true
                 apiId = it.id
             } }
 

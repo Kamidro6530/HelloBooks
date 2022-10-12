@@ -1,13 +1,11 @@
 package com.example.hellobooks.screens.book
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -34,7 +32,7 @@ import com.example.hellobooks.ui.theme.*
 fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-    
+    val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
 
     val imageFromGallery =
         Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
@@ -124,20 +122,41 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
                     )
 
                 }
-                val wishListOfBooks = bookViewModel.listOfBooks.value.filter { it.wishList == true }
-
                 OutlinedIconButton(onClick = {
-                    if (wishListOfBooks.any { wishListBook -> wishListBook.apiId == book.apiId })
-                        bookViewModel.deleteBook(book)
-                    else
-                        bookViewModel.insertBook(Book(0,book.title,book.author,book.publicationDate,book.categories,book.pages,book.isbn,book.description,book.publisher,book.language,book.edition,book.subtitle,book.imageUri,true,book.apiId))
+                    when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                        true -> {
+                            wishListOfBooks.find { it.apiId == book.apiId }
+                                ?.let { bookViewModel.deleteBook(it) }
+                        }
+                        false -> {
+                            bookViewModel.insertBook(
+                                Book(
+                                    0,
+                                    book.title,
+                                    book.author,
+                                    book.publicationDate,
+                                    book.categories,
+                                    book.pages,
+                                    book.isbn,
+                                    book.description,
+                                    book.publisher,
+                                    book.language,
+                                    book.edition,
+                                    book.subtitle,
+                                    book.imageUri,
+                                    true,
+                                    book.apiId
+                                )
+                            )
+                        }
+
+                    }
+
                 }, border = BorderStroke(0.dp, color = Color.Transparent)) {
                     Icon(
-                        if (wishListOfBooks.any { wishListBook -> wishListBook.apiId == book.apiId }){
-                            painterResource(id = R.drawable.fill_heart_24)
-                        } else {
-                            painterResource(id = R.drawable.heart_24)
-                        },
+                        when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                            true -> {painterResource(id = R.drawable.fill_heart_24)}
+                            false ->{ painterResource(id = R.drawable.heart_24) }},
                         contentDescription = "Add book to wishList"
                     )
 

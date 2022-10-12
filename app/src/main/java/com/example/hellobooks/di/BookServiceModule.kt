@@ -5,7 +5,6 @@ import com.example.hellobooks.remote.BooksService
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.internal.managers.ApplicationComponentManager
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
