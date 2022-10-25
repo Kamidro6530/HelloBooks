@@ -16,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Navigation
 import com.example.hellobooks.navigation.bottom_nav_bar.AppBottomNavigation
-import com.example.hellobooks.navigation.bottom_nav_bar.BottomBarItems
 import com.example.hellobooks.ui.theme.HelloBooksTheme
 import com.google.android.material.color.DynamicColors
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,19 +38,11 @@ class MainActivity : ComponentActivity() {
 
                     val navController = rememberNavController()
 
-                    val bottomBarItems = listOf(
-                        BottomBarItems.BookShelfScreen,
-                        BottomBarItems.FindBookScreen,
-                        BottomBarItems.AddNewBookScreen,
-                        BottomBarItems.WishListScreen,
-                        BottomBarItems.StatisticsScreen
-                    )
                     androidx.compose.material.Scaffold(
                         backgroundColor = MaterialTheme.colorScheme.background,
                         bottomBar = {
                             AppBottomNavigation(
                                 navController = navController,
-                                items = bottomBarItems,
                                 bottomBarVisibilityState = bottomBarVisibilityState
                             )
                         },

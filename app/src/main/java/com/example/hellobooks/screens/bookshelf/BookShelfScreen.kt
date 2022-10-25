@@ -14,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
 import com.example.hellobooks.screens.bookshelf.bookshelf_items.EmptyListBookShelfItem
 import com.example.hellobooks.ui.theme.background
@@ -38,9 +39,10 @@ fun BookShelfScreen(navController: NavHostController) {
                         .wrapContentHeight()
                         .clickable(onClick = {
                             navController.navigate(
-                                Routes.BookInformationScreen.withArgs(
+                                Routes.BookInformationScreen.withArgsAndScreenType(
                                     bookViewModel.converters.bookToJson(book),
-                                    Routes.BookShelfScreen.route
+                                    Routes.BookShelfScreen.route,
+                                    screenType = ScreenType.Information
                                 ),
                             )
                         })

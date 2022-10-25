@@ -25,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.ItemContent
 import com.example.hellobooks.ui.theme.background
 import com.example.hellobooks.ui.theme.primary
@@ -57,9 +58,10 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
         items(books) { book ->
             Row(Modifier.clickable {
                 navController.navigate(
-                    Routes.BookInformationScreen.withArgs(
+                    Routes.BookInformationScreen.withArgsAndScreenType(
                         bookViewModel.converters.bookToJson(book),
-                        Routes.FindBookScreen.route
+                        Routes.FindBookScreen.route,
+                        screenType = ScreenType.Information
                     )
                 )
 

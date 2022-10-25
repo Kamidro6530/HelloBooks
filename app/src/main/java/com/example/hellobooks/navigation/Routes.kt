@@ -1,5 +1,7 @@
 package com.example.hellobooks.navigation
 
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
+
 sealed class Routes(var route : String){
     object AddNewBookScreen : Routes("addNewBookScreen")
     object BookShelfScreen : Routes("bookShelfScreen")
@@ -14,6 +16,17 @@ sealed class Routes(var route : String){
             args.forEach { arg ->
                 append("/$arg")
             }
+        }
+    }
+
+    //Special method for BookInformationScreen
+    fun withArgsAndScreenType(vararg stringArgs : String?,screenType: ScreenType ) : String{
+        return buildString {
+            append(route)
+            stringArgs.forEach { arg ->
+                append("/$arg")
+            }
+            append("/${screenType.name}")
         }
     }
 }

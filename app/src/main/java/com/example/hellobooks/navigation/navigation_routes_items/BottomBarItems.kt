@@ -1,4 +1,4 @@
-package com.example.hellobooks.navigation.bottom_nav_bar
+package com.example.hellobooks.navigation.navigation_routes_items
 
 import com.example.hellobooks.R
 

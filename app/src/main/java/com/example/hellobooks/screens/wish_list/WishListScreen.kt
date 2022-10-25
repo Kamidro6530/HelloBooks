@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
 import com.example.hellobooks.screens.wish_list.EmptyWishListItem
 import com.example.hellobooks.ui.theme.background
@@ -37,9 +38,10 @@ fun WishListScreen(navController: NavHostController) {
                         .wrapContentHeight()
                         .clickable(onClick = {
                             navController.navigate(
-                                Routes.BookInformationScreen.withArgs(
+                                Routes.BookInformationScreen.withArgsAndScreenType(
                                     bookViewModel.converters.bookToJson(book),
-                                    Routes.WishListScreen.route
+                                    Routes.WishListScreen.route,
+                                    screenType = ScreenType.Information
                                 ),
                             )
                         })

@@ -24,33 +24,20 @@ import com.example.hellobooks.constants.Constants
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
+import com.example.hellobooks.screens.book.screen_types.BookDetailsScreen
+import com.example.hellobooks.screens.book.screen_types.ManageBookInformationScreen
+import com.example.hellobooks.screens.book.screen_types.StatsBookInformationScreen
 import com.example.hellobooks.ui.theme.*
+import java.lang.Exception
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?) {
+fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?,scrrenType : String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
-    val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
-
-    val imageFromGallery =
-        Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
-
+    val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
     val scrollState = rememberScrollState()
-    val mainInformationCardList = listOf(
-        Pair(book.publicationDate, "Data publikacji"),
-        Pair(book.categories, "Kategorie"),
-        Pair(book.pages.toString(), "Liczba stron"),
-        Pair(book.isbn, "Kod ISBN")
-    )
-
-    val additionalInformationCardList = listOf(
-        Pair(book.publisher, "Wydawca"),
-        Pair(book.language, "Język"),
-        Pair(book.edition, "Edycja/Wydanie"),
-        Pair(book.subtitle, "Podtytuł")
-    )
 
     Box(contentAlignment = Alignment.TopEnd) {
 
@@ -68,10 +55,6 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
                 contentScale = ContentScale.Crop,
             )
         }
-
-
-
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -80,88 +63,32 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
             horizontalAlignment = Alignment.CenterHorizontally,
 
             ) {
-
-
             Spacer(modifier = Modifier.height(200.dp))
+            MainInformationCard(book = book)
 
-
-            MainInformationCard(book)
             Spacer(modifier = Modifier.height(5.dp))
 
-            if (book.description != "")
-                DescriptionCard(book = book)
-
-            if (mainInformationCardList.any { it.first != "" && it.first != "0" }) {
-                Spacer(modifier = Modifier.height(5.dp))
-                InformationCard(list = mainInformationCardList)
-            }
-
-            if (additionalInformationCardList.any { it.first != "" }) {
-                Spacer(modifier = Modifier.height(5.dp))
-                InformationCard(list = additionalInformationCardList)
-            }
+            BookInformationScreenTopMenu(
+                navController = navController,
+                jsonBook = jsonBook,
+                route = route
+            )
 
 
+        when(scrrenType){
+            ScreenType.Information.name -> {BookDetailsScreen(book = book)}
+            ScreenType.Manage.name -> {ManageBookInformationScreen()}
+            ScreenType.Statistics.name -> {StatsBookInformationScreen()}
+            else -> { throw Exception("To navigate to BookInformationScreen use method withArgsAndScreenType")}
         }
 
-        //Column with options buttons
-        if (route != Routes.BookShelfScreen.route) {
-            Column {
 
 
-                OutlinedIconButton(onClick = {
-                    navController.navigate(
-                        Routes.AddNewBookScreen.withArgs(
-                            jsonBook
-                        )
-                    )
-                }, border = BorderStroke(0.dp, color = Color.Transparent)) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.add_24),
-                        contentDescription = "Add book button"
-                    )
-
-                }
-                OutlinedIconButton(onClick = {
-                    when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
-                        true -> {
-                            wishListOfBooks.find { it.apiId == book.apiId }
-                                ?.let { bookViewModel.deleteBook(it) }
-                        }
-                        false -> {
-                            bookViewModel.insertBook(
-                                Book(
-                                    0,
-                                    book.title,
-                                    book.author,
-                                    book.publicationDate,
-                                    book.categories,
-                                    book.pages,
-                                    book.isbn,
-                                    book.description,
-                                    book.publisher,
-                                    book.language,
-                                    book.edition,
-                                    book.subtitle,
-                                    book.imageUri,
-                                    true,
-                                    book.apiId
-                                )
-                            )
-                        }
-
-                    }
-
-                }, border = BorderStroke(0.dp, color = Color.Transparent)) {
-                    Icon(
-                        when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
-                            true -> {painterResource(id = R.drawable.fill_heart_24)}
-                            false ->{ painterResource(id = R.drawable.heart_24) }},
-                        contentDescription = "Add book to wishList"
-                    )
-
-                }
-            }
+            ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(
+                jsonBook = jsonBook,
+                navController = navController,
+                route = route
+            )
         }
     }
 }
@@ -212,7 +139,6 @@ fun MainInformationCard(book: Book) {
                     textAlign = TextAlign.Center
                 )
 
-
             }
         }
 
@@ -220,105 +146,71 @@ fun MainInformationCard(book: Book) {
 }
 
 
-@Composable
-fun DescriptionCard(book: Book) {
-    Card(
-        modifier = Modifier
-            .width(330.dp)
-            .padding(vertical = 8.dp)
-            .wrapContentHeight(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = darkgreybackground,
-            contentColor = primary
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(1f)
-        ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                InformationTextField(value = book.description, label = "O mnie")
 
-            }
-        }
-
-    }
-}
-
-@Composable
-fun InformationCard(list: List<Pair<String, String>>) {
-
-    Card(
-        modifier = Modifier
-            .padding(vertical = 8.dp)
-            .width(330.dp)
-            .wrapContentHeight(),
-        shape = RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = darkgreybackground,
-            contentColor = primary
-        )
-    ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(1f)
-
-
-        ) {
-            Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Spacer(modifier = Modifier.height(3.dp))
-                InformationTextField(value = list[0].first, label = list[0].second)
-
-                InformationTextField(value = list[1].first, label = list[1].second)
-
-                InformationTextField(value = list[2].first, label = list[2].second)
-
-                InformationTextField(value = list[3].first, label = list[3].second)
-
-            }
-        }
-
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InformationTextField(value: String, label: String) {
-    TextField(
-        value = value,
-        onValueChange = {
-            value
-        },
-        modifier = Modifier
-            .fillMaxWidth(),
-        label = {
-            Text(
-                text = label,
-                fontSize = 10.sp,
-                fontFamily = roboto_fonts,
-                fontWeight = FontWeight.Light,
-                color = primary
-            )
-        },
-        shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = darkgreybackground,
-            focusedIndicatorColor = darkgreybackground,
-            unfocusedIndicatorColor = darkgreybackground, textColor = primary
-        ),
-        readOnly = true
-    )
+fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?, navController: NavHostController, route: String?) {
+    val bookViewModel = hiltViewModel<BookViewModel>()
+    val book = bookViewModel.converters.jsonToBook(jsonBook)
+    val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
+
+    if (route != Routes.BookShelfScreen.route) {
+        Column {
+            OutlinedIconButton(onClick = {
+                navController.navigate(
+                    Routes.AddNewBookScreen.withArgs(
+                        jsonBook
+                    )
+                )
+            }, border = BorderStroke(0.dp, color = Color.Transparent)) {
+                Icon(
+                    painter = painterResource(id = R.drawable.add_24),
+                    contentDescription = "Add book button"
+                )
+
+            }
+            OutlinedIconButton(onClick = {
+                when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                    true -> {
+                        wishListOfBooks.find { it.apiId == book.apiId }
+                            ?.let { bookViewModel.deleteBook(it) }
+                    }
+                    false -> {
+                        bookViewModel.insertBook(
+                            Book(
+                                0,
+                                book.title,
+                                book.author,
+                                book.publicationDate,
+                                book.categories,
+                                book.pages,
+                                book.isbn,
+                                book.description,
+                                book.publisher,
+                                book.language,
+                                book.edition,
+                                book.subtitle,
+                                book.imageUri,
+                                true,
+                                book.apiId
+                            )
+                        )
+                    }
+
+                }
+
+            }, border = BorderStroke(0.dp, color = Color.Transparent)) {
+                Icon(
+                    when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                        true -> {painterResource(id = R.drawable.fill_heart_24)}
+                        false ->{ painterResource(id = R.drawable.heart_24) }},
+                    contentDescription = "Add book to wishList"
+                )
+
+            }
+        }
+    }
 }
-
-
-
 
 

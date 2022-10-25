@@ -4,10 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 
 import androidx.navigation.navArgument
+import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 
 import com.example.hellobooks.screens.*
 import com.example.hellobooks.screens.book.BookInformationScreen
@@ -50,17 +52,19 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             WishListScreen(navController)
         }
         composable(
-            Routes.BookInformationScreen.route + "/{book}" + "/{route}",
+            Routes.BookInformationScreen.route + "/{book}" + "/{route}" +"/{screenType}",
             arguments = listOf(
                 navArgument("book") {},
-                navArgument("route") {}
+                navArgument("route") {},
+                navArgument("screenType") {NavType.EnumType(ScreenType::class.java)}
             )
         ) { entry ->
             bottomBarVisibilityState.value = false
             BookInformationScreen(
                 jsonBook = entry.arguments?.getString("book"),
                 navController = navController,
-                route = entry.arguments?.getString("route")
+                route = entry.arguments?.getString("route"),
+                scrrenType = entry.arguments?.getString("screenType")
 
             )
         }
