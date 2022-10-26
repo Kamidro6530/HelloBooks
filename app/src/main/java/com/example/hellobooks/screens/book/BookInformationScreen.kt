@@ -1,6 +1,7 @@
 package com.example.hellobooks.screens.book
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,10 +35,20 @@ import java.lang.Exception
 
 @Composable
 fun BookInformationScreen(jsonBook: String?, navController: NavHostController, route: String?,scrrenType : String?) {
+
+    BackHandler() {
+       when(route){
+           Routes.BookShelfScreen.route -> {navController.navigate(Routes.BookShelfScreen.route)}
+           Routes.WishListScreen.route -> {navController.navigate(Routes.WishListScreen.route)}
+           Routes.FindBookScreen.route -> {navController.navigate(Routes.FindBookScreen.route)}
+       }
+    }
+
     val bookViewModel = hiltViewModel<BookViewModel>()
     val book = bookViewModel.converters.jsonToBook(jsonBook)
     val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
     val scrollState = rememberScrollState()
+
 
     Box(contentAlignment = Alignment.TopEnd) {
 
@@ -55,6 +66,7 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
                 contentScale = ContentScale.Crop,
             )
         }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -84,12 +96,13 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
 
 
 
-            ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(
-                jsonBook = jsonBook,
-                navController = navController,
-                route = route
-            )
+
         }
+        ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(
+            jsonBook = jsonBook,
+            navController = navController,
+            route = route
+        )
     }
 }
 

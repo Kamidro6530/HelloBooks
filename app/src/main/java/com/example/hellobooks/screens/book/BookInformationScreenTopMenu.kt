@@ -63,7 +63,7 @@ fun BookInformationScreenTopMenu(jsonBook: String?, navController: NavHostContro
                             onClick = { navController.navigate(
                                it.route.withArgsAndScreenType(
                                 bookViewModel.converters.bookToJson(book),
-                                Routes.BookShelfScreen.route,
+                                route,
                                 screenType = it.screenType
                             )) },
                             selected = false
