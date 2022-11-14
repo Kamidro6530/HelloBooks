@@ -14,8 +14,8 @@ interface BookDao {
     fun getAllBooksFromDatabase(): Flow<List<Book>>
 
     @Insert
-    fun insertBook(book: Book)
+    fun insertBookToDatabase(book: Book)
 
     @Delete
-    fun deleteBook(book: Book)
+    fun deleteBookFromDatabase(book: Book)
 }

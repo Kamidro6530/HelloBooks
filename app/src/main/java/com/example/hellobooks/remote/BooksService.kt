@@ -5,6 +5,6 @@ import com.example.hellobooks.remote.dto.Response
 
 interface BooksService {
 
-    suspend fun getBooks(query_parameter: String) : Response
+    suspend fun getBooksFromBooksService(query_parameter: String) : Response
 
 }

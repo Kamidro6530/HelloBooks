@@ -19,8 +19,8 @@ sealed class Routes(var route : String){
         }
     }
 
-    //Special method for BookInformationScreen
-    fun withArgsAndScreenType(vararg stringArgs : String?,screenType: ScreenType ) : String{
+
+    fun withArgsAndScreenTypeForBookInformationScreen(vararg stringArgs : String?,screenType: ScreenType ) : String{
         return buildString {
             append(route)
             stringArgs.forEach { arg ->

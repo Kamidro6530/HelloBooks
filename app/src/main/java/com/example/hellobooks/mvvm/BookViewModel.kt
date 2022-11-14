@@ -30,26 +30,26 @@ class BookViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             bookRepository.getAllBooksFromDatabase().collect {
-                _listOfBooksForBookshelf.value = it.filter { it.wishList == false }
-                _listOfBooksForWishList.value = it.filter { it.wishList == true }
+                _listOfBooksForBookshelf.value = it.filter { it.itShouldBeOnWishList == false }
+                _listOfBooksForWishList.value = it.filter { it.itShouldBeOnWishList == true }
             }
         }
     }
 
 
 
-    fun insertBook(book: Book) {
-        viewModelScope.launch { bookRepository.insertBook(book) }
+    fun insertBookToDatabase(book: Book) {
+        viewModelScope.launch { bookRepository.insertBookToDatabase(book) }
     }
 
-    fun deleteBook(book: Book) {
-        viewModelScope.launch { bookRepository.deleteBook(book) }
+    fun deleteBookFromDatabase(book: Book) {
+        viewModelScope.launch { bookRepository.deleteBookFromDatabase(book) }
     }
 
-    suspend fun getBook(query_parameter: String) {
+    suspend fun getBookFromBookService(query_parameter: String) {
 
         viewModelScope.launch {
-            bookRepository.getBook(query_parameter).collect {
+            bookRepository.getBookFromBooksService(query_parameter).collect {
                 if (it != null)
                     _searchBarResultsList.value = it
             }

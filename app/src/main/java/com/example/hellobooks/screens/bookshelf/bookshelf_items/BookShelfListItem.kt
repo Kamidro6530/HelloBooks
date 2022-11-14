@@ -31,7 +31,7 @@ import com.example.hellobooks.ui.theme.roboto_fonts
 @Composable
 fun BookShelfListItem(jsonBook: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val book = bookViewModel.converters.jsonToBook(jsonBook)
+    val book = bookViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
     val dismissState =rememberDismissState(initialValue = DismissValue.Default, confirmStateChange = { true })
 
     SwipeToDismiss(

@@ -45,7 +45,7 @@ fun BookInformationScreen(jsonBook: String?, navController: NavHostController, r
     }
 
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val book = bookViewModel.converters.jsonToBook(jsonBook)
+    val book = bookViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
     val imageFromGallery = Constants.GALLERY_IMAGE_PATH + bookViewModel.converters.decodeUriKey(book.imageUri)
     val scrollState = rememberScrollState()
 
@@ -165,7 +165,7 @@ fun MainInformationCard(book: Book) {
 @Composable
 fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?, navController: NavHostController, route: String?) {
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val book = bookViewModel.converters.jsonToBook(jsonBook)
+    val book = bookViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
     val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
 
     if (route != Routes.BookShelfScreen.route) {
@@ -184,13 +184,13 @@ fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?,
 
             }
             OutlinedIconButton(onClick = {
-                when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                when(wishListOfBooks.any{wishListBook -> wishListBook.itemIdentifierOnlyForDownloadedBooks == book.itemIdentifierOnlyForDownloadedBooks}){
                     true -> {
-                        wishListOfBooks.find { it.apiId == book.apiId }
-                            ?.let { bookViewModel.deleteBook(it) }
+                        wishListOfBooks.find { it.itemIdentifierOnlyForDownloadedBooks == book.itemIdentifierOnlyForDownloadedBooks }
+                            ?.let { bookViewModel.deleteBookFromDatabase(it) }
                     }
                     false -> {
-                        bookViewModel.insertBook(
+                        bookViewModel.insertBookToDatabase(
                             Book(
                                 0,
                                 book.title,
@@ -206,7 +206,7 @@ fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?,
                                 book.subtitle,
                                 book.imageUri,
                                 true,
-                                book.apiId
+                                book.itemIdentifierOnlyForDownloadedBooks
                             )
                         )
                     }
@@ -215,7 +215,7 @@ fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?,
 
             }, border = BorderStroke(0.dp, color = Color.Transparent)) {
                 Icon(
-                    when(wishListOfBooks.any{wishListBook -> wishListBook.apiId == book.apiId}){
+                    when(wishListOfBooks.any{wishListBook -> wishListBook.itemIdentifierOnlyForDownloadedBooks == book.itemIdentifierOnlyForDownloadedBooks}){
                         true -> {painterResource(id = R.drawable.fill_heart_24)}
                         false ->{ painterResource(id = R.drawable.heart_24) }},
                     contentDescription = "Add book to wishList"

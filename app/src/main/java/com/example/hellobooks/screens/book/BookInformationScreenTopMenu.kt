@@ -26,7 +26,7 @@ import com.example.hellobooks.ui.theme.primary
 @Composable
 fun BookInformationScreenTopMenu(jsonBook: String?, navController: NavHostController, route: String?){
     val bookViewModel = hiltViewModel<BookViewModel>()
-    val book = bookViewModel.converters.jsonToBook(jsonBook)
+    val book = bookViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
     val items = listOf(
         TopBarBookInformationScreenItems.InfoBookInformationScreen,
         TopBarBookInformationScreenItems.ManageBookInformationScreen,
@@ -61,8 +61,8 @@ fun BookInformationScreenTopMenu(jsonBook: String?, navController: NavHostContro
                                 )
                             },
                             onClick = { navController.navigate(
-                               it.route.withArgsAndScreenType(
-                                bookViewModel.converters.bookToJson(book),
+                               it.route.withArgsAndScreenTypeForBookInformationScreen(
+                                bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
                                 route,
                                 screenType = it.screenType
                             )) },

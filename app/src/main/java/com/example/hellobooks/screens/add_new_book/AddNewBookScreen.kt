@@ -38,11 +38,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") {
-
+fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = "") {
+    val scrollState = rememberScrollState()
     val bookViewModel = hiltViewModel<BookViewModel>()
     //If user coming from BottomBar text fields are empty
-    val book = if (jsonBook!="{book}") bookViewModel.converters.jsonToBook(jsonBook) else Book()
+    val book = if (bookAsJson!="{book}") bookViewModel.converters.parseJsonArgumentIntoBook(bookAsJson) else createEmptyBookObjectBecauseNavigationArgumentDoNotHaveAnyArguments()
     //Book parameters
     var title by remember { mutableStateOf(TextFieldValue(book.title)) }
     var author by remember { mutableStateOf(TextFieldValue(book.author)) }
@@ -60,14 +60,11 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
     var imageUri by remember { mutableStateOf<Uri?>(Uri.parse(book.imageUri)) }
 
 
-    val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState)
     ) {
-
-
         //Title row
         Row(
             Modifier
@@ -88,7 +85,6 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
             modifier = Modifier
                 .wrapContentHeight()
                 .padding(horizontal = 30.dp, vertical = 15.dp)
-
         ) {
             Box(
                 modifier = Modifier
@@ -98,207 +94,60 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
             ) {
                 Column {
                     Row {
-                        TextField(
-                            value = title,
-                            onValueChange = {
-                                title = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Tytuł",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
-
-                            maxLines = 1
+                        CustomTextFieldForAddNewBookScreen(
+                            descriptionText = "Tytuł",
+                            onTextChange = {title = it},
+                            textFieldValue = title
                         )
 
                     }
 
                     Row {
-                        TextField(
-                            value = author,
-                            onValueChange = {
-                                author = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Autor / Autorzy",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
-
-                            maxLines = 1
+                        CustomTextFieldForAddNewBookScreen(
+                            descriptionText = "Autor / Autorzy",
+                            onTextChange = {author = it},
+                            textFieldValue = author
                         )
 
                     }
                     Row {
-                        TextField(
-                            value = publicationDate,
-                            onValueChange = {
-                                publicationDate = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Data wydania (rrrr-mm-dd)",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
+                       CustomTextFieldForAddNewBookScreen(
+                           descriptionText = "Data wydania (rrrr-mm-dd)",
+                           onTextChange = {publicationDate = it} ,
+                           textFieldValue = publicationDate
+                       )
 
-                            maxLines = 1
+                    }
+                    Row {
+                        CustomTextFieldForAddNewBookScreen(
+                            descriptionText = "Liczba stron",
+                            onTextChange = {pages = it} ,
+                            textFieldValue = pages
                         )
 
                     }
                     Row {
-                        TextField(
-                            value = pages,
-                            onValueChange = {
-                                pages = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Liczba stron",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
-                            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                            maxLines = 1
-                        )
+                       CustomTextFieldForAddNewBookScreen(
+                           descriptionText = "Kategorie",
+                           onTextChange = {categories = it},
+                           textFieldValue = categories
+                       )
 
                     }
                     Row {
-                        TextField(
-                            value = categories,
-                            onValueChange = {
-                                categories = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Kategorie",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
-
-                            maxLines = 1
+                        CustomTextFieldForAddNewBookScreen(
+                            descriptionText = "ISBN",
+                            onTextChange = {isbn = it},
+                            textFieldValue = isbn
                         )
-
                     }
                     Row {
-
-                        TextField(
-                            value = isbn,
-                            onValueChange = {
-                                isbn = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "ISBN",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Light,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = primary, //hide the indicator
-                                unfocusedIndicatorColor = primary, textColor = primary
-                            ),
-
-                            maxLines = 1
+                        CustomTextFieldForAddNewBookScreen(
+                            descriptionText = "Opis",
+                            onTextChange = {description = it},
+                            textFieldValue = description,
+                            fontWeight = FontWeight.Thin
                         )
-
-                    }
-                    Row {
-                        TextField(
-                            value = description,
-                            onValueChange = {
-                                description = it
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 10.dp)
-                                .padding(horizontal = 8.dp),
-                            label = {
-                                Text(
-                                    text = "Opis",
-                                    fontFamily = roboto_fonts,
-                                    fontWeight = FontWeight.Thin,
-                                    color = primary
-                                )
-                            },
-                            shape = RoundedCornerShape(8.dp),
-                            colors = TextFieldDefaults.textFieldColors(
-                                containerColor = background,
-                                focusedIndicatorColor = background, //hide the indicator
-                                unfocusedIndicatorColor = background, textColor = primary
-                            ),
-                        )
-
 
                     }
 
@@ -312,8 +161,7 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
 
 
         //Show other options button
-
-        var showOtherOptions by remember { mutableStateOf(false) }
+        var showMoreOptions by remember { mutableStateOf(false) }
 
         Row(
             modifier = Modifier
@@ -322,19 +170,18 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
                 .wrapContentHeight()
         ) {
             Button(
-                onClick = { showOtherOptions = showOtherOptions.not() },
+                onClick = { showMoreOptions = showMoreOptions.not() },
                 colors = ButtonDefaults.buttonColors(containerColor = background),
                 shape = RoundedCornerShape(6.dp),
                 contentPadding = PaddingValues(4.dp)
             ) {
                 Icon(Icons.Filled.Add, "Other options", tint = primary)
-
             }
         }
 
 
         //Other details Row
-        if (showOtherOptions == true) {
+        if (showMoreOptions == true) {
             Row(
                 modifier = Modifier
                     .wrapContentHeight()
@@ -350,119 +197,35 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
                 ) {
                     Column {
                         Row {
-                            TextField(
-                                value = publisher,
-                                onValueChange = {
-                                    publisher = it
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp)
-                                    .padding(horizontal = 8.dp),
-                                label = {
-                                    Text(
-                                        text = "Wydawca",
-                                        fontFamily = roboto_fonts,
-                                        fontWeight = FontWeight.Light,
-                                        color = primary
-                                    )
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = background,
-                                    focusedIndicatorColor = primary, //hide the indicator
-                                    unfocusedIndicatorColor = primary, textColor = primary
-                                ),
-
-                                maxLines = 1
+                            CustomTextFieldForAddNewBookScreen(
+                                descriptionText = "Wydawca",
+                                onTextChange = {publisher = it},
+                                textFieldValue = publisher
                             )
 
                         }
 
                         Row {
-                            TextField(
-                                value = language,
-                                onValueChange = {
-                                    language = it
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp)
-                                    .padding(horizontal = 8.dp),
-                                label = {
-                                    Text(
-                                        text = "Język",
-                                        fontFamily = roboto_fonts,
-                                        fontWeight = FontWeight.Light,
-                                        color = primary
-                                    )
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = background,
-                                    focusedIndicatorColor = primary, //hide the indicator
-                                    unfocusedIndicatorColor = primary, textColor = primary
-                                ),
-
-                                maxLines = 1
+                            CustomTextFieldForAddNewBookScreen(
+                                descriptionText =  "Język",
+                                onTextChange = {language = it},
+                                textFieldValue = language
                             )
 
                         }
                         Row {
-                            TextField(
-                                value = edition,
-                                onValueChange = {
-                                    edition = it
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp)
-                                    .padding(horizontal = 8.dp),
-                                label = {
-                                    Text(
-                                        text = "Edycja/Wydanie",
-                                        fontFamily = roboto_fonts,
-                                        fontWeight = FontWeight.Light,
-                                        color = primary
-                                    )
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = background,
-                                    focusedIndicatorColor = primary, //hide the indicator
-                                    unfocusedIndicatorColor = primary, textColor = primary
-                                ),
-
-                                maxLines = 1
+                            CustomTextFieldForAddNewBookScreen(
+                                descriptionText = "Edycja/Wydanie",
+                                onTextChange = {edition = it},
+                                textFieldValue = edition
                             )
 
                         }
                         Row {
-                            TextField(
-                                value = subtitle,
-                                onValueChange = {
-                                    subtitle = it
-                                },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 10.dp)
-                                    .padding(horizontal = 8.dp),
-                                label = {
-                                    Text(
-                                        text = "Podtytuł",
-                                        fontFamily = roboto_fonts,
-                                        fontWeight = FontWeight.Light,
-                                        color = primary
-                                    )
-                                },
-                                shape = RoundedCornerShape(8.dp),
-                                colors = TextFieldDefaults.textFieldColors(
-                                    containerColor = background,
-                                    focusedIndicatorColor = primary, //hide the indicator
-                                    unfocusedIndicatorColor = primary, textColor = primary
-                                ),
-
-                                maxLines = 1
+                            CustomTextFieldForAddNewBookScreen(
+                                descriptionText =  "Podtytuł",
+                                onTextChange = {subtitle = it},
+                                textFieldValue = subtitle
                             )
 
                         }
@@ -560,7 +323,7 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
                     CoroutineScope(Dispatchers.IO).launch {
                         //Get only unique value from uri and insert to database(not able to send full uri for navigation)
                             val uniqueKey = imageUri?.toString()?.split("/image")
-                        bookViewModel.insertBook(
+                        bookViewModel.insertBookToDatabase(
                             Book(
                                 book.id,
                                 title.text,
@@ -607,6 +370,42 @@ fun AddNewBookScreen(navController : NavHostController,jsonBook : String? = "") 
 
 
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CustomTextFieldForAddNewBookScreen(descriptionText : String, onTextChange: (TextFieldValue) -> Unit,textFieldValue: TextFieldValue,fontWeight: FontWeight = FontWeight.Light) {
+
+    TextField(
+        value = textFieldValue,
+        onValueChange = onTextChange,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 10.dp)
+            .padding(horizontal = 8.dp),
+        label = {
+            Text(
+                text = descriptionText,
+                fontFamily = roboto_fonts,
+                fontWeight = fontWeight,
+                color = primary
+            )
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.textFieldColors(
+            containerColor = background,
+            focusedIndicatorColor = primary, //hide the indicator
+            unfocusedIndicatorColor = primary, textColor = primary
+        ),
+
+        maxLines = 1
+    )
+
+}
+
+
+
+
+fun createEmptyBookObjectBecauseNavigationArgumentDoNotHaveAnyArguments() = Book()
 
 
 

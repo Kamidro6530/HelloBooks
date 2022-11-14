@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class BookServiceImpl @Inject constructor(private val client: HttpClient) : BooksService {
 
-    override suspend fun getBooks(query_parameter: String): Response = client.request { url(HttpRoutes.BASE_URL+query_parameter+":keyes&key="+BuildConfig.API_KEY) }.body()
+    override suspend fun getBooksFromBooksService(query_parameter: String): Response = client.request { url(HttpRoutes.BASE_URL+query_parameter+":keyes&key="+BuildConfig.API_KEY) }.body()
 
 
 }

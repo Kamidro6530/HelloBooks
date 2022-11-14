@@ -37,7 +37,7 @@ fun Navigation(navController: NavHostController, bottomBarVisibilityState: Mutab
             bottomBarVisibilityState.value = false
             AddNewBookScreen(
                 navController = navController,
-                jsonBook = entry.arguments?.getString("book"))
+                bookAsJson = entry.arguments?.getString("book"))
         }
         composable(Routes.FindBookScreen.route) {
             bottomBarVisibilityState.value = true

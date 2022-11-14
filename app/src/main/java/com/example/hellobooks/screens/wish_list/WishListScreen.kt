@@ -38,15 +38,15 @@ fun WishListScreen(navController: NavHostController) {
                         .wrapContentHeight()
                         .clickable(onClick = {
                             navController.navigate(
-                                Routes.BookInformationScreen.withArgsAndScreenType(
-                                    bookViewModel.converters.bookToJson(book),
+                                Routes.BookInformationScreen.withArgsAndScreenTypeForBookInformationScreen(
+                                    bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
                                     Routes.WishListScreen.route,
                                     screenType = ScreenType.Information
                                 ),
                             )
                         })
                 ) {
-                    BookShelfListItem(jsonBook = bookViewModel.converters.bookToJson(book))
+                    BookShelfListItem(jsonBook = bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book))
                 }
                 Row() {
 

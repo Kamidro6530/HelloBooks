@@ -18,35 +18,39 @@ class BookRepository @Inject constructor(
     private val booksService: BooksService
 ) {
 
-    fun insertBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {bookDao.insertBook(book)}
+    fun insertBookToDatabase(book: Book) =
+        CoroutineScope(Dispatchers.IO).launch { bookDao.insertBookToDatabase(book) }
 
 
-    fun deleteBook(book: Book) = CoroutineScope(Dispatchers.IO).launch {  bookDao.deleteBook(book) }
+    fun deleteBookFromDatabase(book: Book) =
+        CoroutineScope(Dispatchers.IO).launch { bookDao.deleteBookFromDatabase(book) }
 
     fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooksFromDatabase()
 
 
-    suspend fun getBook(query_parameter: String): Flow<List<Book>?> {
+    suspend fun getBookFromBooksService(query_parameter: String): Flow<List<Book>?> {
         return flow {
-            val data = booksService.getBooks(query_parameter).items?.map { Book().apply {
+            val dataToEmit = booksService.getBooksFromBooksService(query_parameter).items?.map {
                 val book = it.volumeInfo
-                title = book?.title ?: ""
-                author = book?.authors?.joinToString("") ?: ""
-                publicationDate = book?.publishedDate ?: ""
-                categories = book?.categories?.joinToString("") ?: ""
-                pages = book?.pageCount ?: 0
-                isbn = ""
-                description = book?.description ?: ""
-                publisher = book?.publisher ?: ""
-                language = book?.language ?: ""
-                edition = ""
-                subtitle = book?.subtitle ?: ""
-                imageUri = book?.imageLinks?.thumbnail ?: ""
-                wishList = true
-                apiId = it.id
-            } }
+                Book().apply {
+                    title = book?.title ?: ""
+                    author = book?.authors?.joinToString("") ?: ""
+                    publicationDate = book?.publishedDate ?: ""
+                    categories = book?.categories?.joinToString("") ?: ""
+                    pages = book?.pageCount ?: 0
+                    isbn = ""
+                    description = book?.description ?: ""
+                    publisher = book?.publisher ?: ""
+                    language = book?.language ?: ""
+                    edition = ""
+                    subtitle = book?.subtitle ?: ""
+                    imageUri = book?.imageLinks?.thumbnail ?: ""
+                    itShouldBeOnWishList = true
+                    itemIdentifierOnlyForDownloadedBooks = it.id
+                }
+            }
 
-            emit(data)
+            emit(dataToEmit)
         }.flowOn(Dispatchers.IO)
     }
 

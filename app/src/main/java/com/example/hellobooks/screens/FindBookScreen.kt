@@ -58,8 +58,8 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
         items(books) { book ->
             Row(Modifier.clickable {
                 navController.navigate(
-                    Routes.BookInformationScreen.withArgsAndScreenType(
-                        bookViewModel.converters.bookToJson(book),
+                    Routes.BookInformationScreen.withArgsAndScreenTypeForBookInformationScreen(
+                        bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
                         Routes.FindBookScreen.route,
                         screenType = ScreenType.Information
                     )
@@ -101,7 +101,7 @@ fun SearchBar(
                 },
             value = searchText,
             onValueChange = {
-                CoroutineScope(Dispatchers.IO).launch { bookViewModel.getBook(it) }
+                CoroutineScope(Dispatchers.IO).launch { bookViewModel.getBookFromBookService(it) }
                 searchText = it
             },
             placeholder = {

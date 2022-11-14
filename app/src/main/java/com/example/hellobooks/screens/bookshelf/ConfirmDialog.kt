@@ -117,7 +117,7 @@ fun ConfirmDeleteBook(book: Book, dismissState: DismissState) {
 
                         TextButton(onClick = {
                             scope.launch {
-                                bookViewModel.deleteBook(book)
+                                bookViewModel.deleteBookFromDatabase(book)
                                 dismissState.reset()
                                 openDialog.value = false
                             }
