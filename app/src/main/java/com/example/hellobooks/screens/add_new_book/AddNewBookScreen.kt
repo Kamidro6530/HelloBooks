@@ -238,80 +238,20 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
 
             }
         }
-        //Image Picker row
+
+
+
         Row(
             Modifier
                 .wrapContentHeight()
                 .padding(horizontal = 30.dp, vertical = 25.dp)
                 .align(Alignment.CenterHorizontally)
         ) {
-            Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .width(500.dp)
-                    .background(background),
-
-                ) {
-                Column(
-                    Modifier
-                        .align(Alignment.Center)
-                        .padding(10.dp)
-                ) {
-
-                    Row() {
-
-
-                        val context = LocalContext.current
-                         val selectImageLauncher = rememberLauncherForActivityResult(
-                            ActivityResultContracts.OpenDocument()
-                        ) { uri ->
-                             //Long-term access to Uri
-                             if (uri != null) {
-                                 context.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                             }
-
-                             imageUri = uri
-
-                        }
-
-                        Button(
-                            onClick = { selectImageLauncher.launch(arrayOf("image/*")) },
-                            colors = ButtonDefaults.outlinedButtonColors(
-                                containerColor = background,
-                                contentColor = darkgreybackground
-                            ),
-                            modifier = Modifier
-                                .size(height = 200.dp, width = 150.dp),
-
-                            shape = RectangleShape,
-                            border = BorderStroke(
-                                2.dp,
-                                darkgreybackground
-                            )
-                        ) {
-                            Box(
-                                modifier = Modifier
-                                    .background(background)
-                            ) {
-                                if (imageUri == null)
-                                    Image(painterResource(id = R.drawable.picture_24), "Pick image")
-                                else {
-
-                                   Image(painter = rememberImagePainter(data = Uri.parse(imageUri.toString())), contentDescription = "",Modifier.size(height = 200.dp, width = 150.dp))
-
-                                }
-
-                            }
-                        }
-
-                    }
-
-
-                }
-
-
-            }
+            GalleryImagePicker(onImagePick = {imageUri = it}, imageUri = imageUri )
         }
+
+
+
         //Create new book button
         Row(
             modifier = Modifier
@@ -321,8 +261,6 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
             Button(
                 onClick = {
                     CoroutineScope(Dispatchers.IO).launch {
-                        //Get only unique value from uri and insert to database(not able to send full uri for navigation)
-                            val uniqueKey = imageUri?.toString()?.split("/image")
                         bookViewModel.insertBookToDatabase(
                             Book(
                                 book.id,
@@ -337,11 +275,8 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
                                 language.text,
                                 edition.text,
                                 subtitle.text,
-                                // Image
-                                if (uniqueKey?.size != 1)
-                                bookViewModel.converters.encodeUriKey(uniqueKey?.get(1))
-                                else
-                                    imageUri.toString()
+                                defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(imageUri,bookViewModel)
+
                             )
                         )
                     }
@@ -402,10 +337,92 @@ fun CustomTextFieldForAddNewBookScreen(descriptionText : String, onTextChange: (
 
 }
 
+@Composable
+fun GalleryImagePicker(onImagePick :(Uri?) -> Unit,imageUri: Uri?) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .width(500.dp)
+            .background(background),
+
+        ) {
+        Column(
+            Modifier
+                .align(Alignment.Center)
+                .padding(10.dp)
+        ) {
+
+            Row() {
+
+
+                val context = LocalContext.current
+                val selectImageLauncher = rememberLauncherForActivityResult(
+                    ActivityResultContracts.OpenDocument()
+                ) { uri ->
+                    //Long-term access to Uri
+                    if (uri != null) {
+                        context.contentResolver.takePersistableUriPermission(uri,Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+
+                    onImagePick(uri)
+
+                }
+
+                Button(
+                    onClick = { selectImageLauncher.launch(arrayOf("image/*")) },
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        containerColor = background,
+                        contentColor = darkgreybackground
+                    ),
+                    modifier = Modifier
+                        .size(height = 200.dp, width = 150.dp),
+
+                    shape = RectangleShape,
+                    border = BorderStroke(2.dp,darkgreybackground)
+                ) {
+                    Box(
+                        modifier = Modifier
+                            .background(background)
+                    ) {
+                        if (imageUri == null)
+                            Image(painterResource(id = R.drawable.picture_24), "Pick image")
+                        else
+                            Image(painter = rememberImagePainter(data = Uri.parse(imageUri.toString())), contentDescription = "",Modifier.size(height = 200.dp, width = 150.dp))
+
+
+                    }
+                }
+
+            }
+
+
+        }
+
+
+    }
+}
+
 
 
 
 fun createEmptyBookObjectBecauseNavigationArgumentDoNotHaveAnyArguments() = Book()
+
+fun defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(imageUri: Uri?,bookViewModel : BookViewModel) : String{
+
+    fun imageIsFromApi() = imageUri.toString()
+
+    //Get only unique value from uri and insert to database(not able to send full uri for navigation)
+    val uniqueImageUriKey= imageUri?.toString()?.split("/image")
+    val uniqueKeyPositionInImageUriPath = 1
+
+    return if (imageUri.toString().contains("http"))
+        imageIsFromApi()
+    else
+        bookViewModel.converters.encodeUriKey(uniqueImageUriKey?.get(uniqueKeyPositionInImageUriPath))
+
+}
+
+
 
 
 
