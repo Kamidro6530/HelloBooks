@@ -2,6 +2,7 @@ package com.example.hellobooks.screens
 
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.*
@@ -252,53 +253,30 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
 
 
 
-        //Create new book button
+        
         Row(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 15.dp, bottom = 15.dp)
         ) {
-            Button(
-                onClick = {
-                    CoroutineScope(Dispatchers.IO).launch {
-                        bookViewModel.insertBookToDatabase(
-                            Book(
-                                book.id,
-                                title.text,
-                                author.text,
-                                publicationDate.text,
-                                categories.text,
-                                pages.text.toInt(),
-                                isbn.text,
-                                description.text,
-                                publisher.text,
-                                language.text,
-                                edition.text,
-                                subtitle.text,
-                                defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(imageUri,bookViewModel)
+            val bookForInsertToDatabase =  Book(
+                book.id,
+                title.text,
+                author.text,
+                publicationDate.text,
+                categories.text,
+                if(pages.text.contains("[a-z]".toRegex()) || pages.text.contains("[A-Z]".toRegex())) 0 else pages.text.toInt(),
+                isbn.text,
+                description.text,
+                publisher.text,
+                language.text,
+                edition.text,
+                subtitle.text,
+                defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(imageUri,bookViewModel)
+            )
 
-                            )
-                        )
-                    }
-                    navController.navigate(Routes.BookShelfScreen.route)
+            CreateNewBookButton(bookViewModel = bookViewModel, navController = navController, book = bookForInsertToDatabase)
 
-                },
-                modifier = Modifier
-                    .width(300.dp)
-                    .wrapContentHeight(),
-                shape = RoundedCornerShape(5.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = tertiary),
-            ) {
-                Text(
-                    text = "Dodaj książke ",
-                    modifier = Modifier.padding(10.dp),
-                    color = primary,
-                    fontSize = 16.sp,
-                    fontFamily = roboto_fonts,
-                    fontWeight = FontWeight.Bold
-                )
-
-            }
         }
 
     }
@@ -332,7 +310,8 @@ fun CustomTextFieldForAddNewBookScreen(descriptionText : String, onTextChange: (
             unfocusedIndicatorColor = primary, textColor = primary
         ),
 
-        maxLines = 1
+        maxLines = if (descriptionText != "Opis") 1 else 10
+
     )
 
 }
@@ -402,23 +381,59 @@ fun GalleryImagePicker(onImagePick :(Uri?) -> Unit,imageUri: Uri?) {
     }
 }
 
+@Composable
+fun CreateNewBookButton(bookViewModel: BookViewModel,navController: NavHostController,book: Book) {
+    Button(
+        onClick = {
+            CoroutineScope(Dispatchers.IO).launch {
+                bookViewModel.insertBookToDatabase(
+                   book
+                )
+            }
+            navController.navigate(Routes.BookShelfScreen.route)
+
+        },
+        modifier = Modifier
+            .width(300.dp)
+            .wrapContentHeight(),
+        shape = RoundedCornerShape(5.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = tertiary),
+    ) {
+        Text(
+            text = "Dodaj książke ",
+            modifier = Modifier.padding(10.dp),
+            color = primary,
+            fontSize = 16.sp,
+            fontFamily = roboto_fonts,
+            fontWeight = FontWeight.Bold
+        )
+
+    }
+}
+
 
 
 
 fun createEmptyBookObjectBecauseNavigationArgumentDoNotHaveAnyArguments() = Book()
 
 fun defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(imageUri: Uri?,bookViewModel : BookViewModel) : String{
+    Log.d("TEST", "TEST: $imageUri")
+    val uniqueKeyPositionInImageUriPath = 1
+    //Get only unique value from uri and insert to database(not able to send full uri for navigation)
+
+    val uniqueImageUriKey = if(imageUri.toString() != "")
+            (imageUri.toString().split("/image")).get(uniqueKeyPositionInImageUriPath)
+        else
+            ""
+
 
     fun imageIsFromApi() = imageUri.toString()
-
-    //Get only unique value from uri and insert to database(not able to send full uri for navigation)
-    val uniqueImageUriKey= imageUri?.toString()?.split("/image")
-    val uniqueKeyPositionInImageUriPath = 1
+    fun imageIsFromGallery() = bookViewModel.converters.encodeUriKey(uniqueImageUriKey)
 
     return if (imageUri.toString().contains("http"))
         imageIsFromApi()
     else
-        bookViewModel.converters.encodeUriKey(uniqueImageUriKey?.get(uniqueKeyPositionInImageUriPath))
+        imageIsFromGallery()
 
 }
 
