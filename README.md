@@ -5,7 +5,7 @@
 ##  :bulb: Features
 • You can add all books from your collections and manage them <br>
 • Use search engine to find specific book and upload on your bookshelf <br>
-
+• Wish list will help you not to forget the books that interest you 
 ![image 1](img/scr1.PNG)<br>
 
 ## :wrench: Technologies
@@ -19,7 +19,6 @@
 ![image 3](img/scr3.PNG)<br>
 
 ## :dart: Project goals
-• Book wish list <br>
 • Basic statistics (e.g. How many pages I read, How many books I have on bookcase) <br>
 • Add tools to manage our progress <br>
 • Filters and more options for search engine <br>
