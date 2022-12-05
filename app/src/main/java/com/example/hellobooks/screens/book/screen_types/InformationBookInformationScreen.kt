@@ -86,7 +86,7 @@ fun DescriptionCard(book: Book) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                InformationTextField(value = book.description, label = "O mnie")
+                InformationTextField(value = book.description, text = "O mnie")
 
             }
         }
@@ -120,13 +120,13 @@ fun InformationCard(list: List<Pair<String, String>>) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Spacer(modifier = Modifier.height(3.dp))
-                InformationTextField(value = list[0].first, label = list[0].second)
+                InformationTextField(value = list[0].first, text = list[0].second)
 
-                InformationTextField(value = list[1].first, label = list[1].second)
+                InformationTextField(value = list[1].first, text = list[1].second)
 
-                InformationTextField(value = list[2].first, label = list[2].second)
+                InformationTextField(value = list[2].first, text = list[2].second)
 
-                InformationTextField(value = list[3].first, label = list[3].second)
+                InformationTextField(value = list[3].first, text = list[3].second)
 
             }
         }
@@ -136,7 +136,7 @@ fun InformationCard(list: List<Pair<String, String>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun InformationTextField(value: String, label: String) {
+fun InformationTextField(value: String, text: String) {
     TextField(
         value = value,
         onValueChange = {
@@ -146,14 +146,13 @@ fun InformationTextField(value: String, label: String) {
             .fillMaxWidth(),
         label = {
             Text(
-                text = label,
+                text = text,
                 fontSize = 10.sp,
                 fontFamily = roboto_fonts,
                 fontWeight = FontWeight.Light,
                 color = primary
             )
         },
-        shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.textFieldColors(
             containerColor = darkgreybackground,
             focusedIndicatorColor = darkgreybackground,

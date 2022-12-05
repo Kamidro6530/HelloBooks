@@ -1,6 +1,7 @@
 package com.example.hellobooks.local.room.book
 
 import androidx.room.ColumnInfo
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -22,8 +23,12 @@ data class Book(
     @ColumnInfo(name = "subtitle") var subtitle: String = "",
     //Image
     @ColumnInfo(name = "image") var imageUri: String = "",
+
     @ColumnInfo(name = "itShouldBeOnWishList") var itShouldBeOnWishList : Boolean = false,
-    @ColumnInfo(name = "apiId") var itemIdentifierOnlyForDownloadedBooks : String? = ""
+    @ColumnInfo(name = "apiId") var itemIdentifierOnlyForDownloadedBooks : String? = "",
+    @Embedded var manageBookInformation : ManageBook = ManageBook()
+
+
 
 
     )

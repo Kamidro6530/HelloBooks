@@ -7,7 +7,7 @@ import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.local.room.book.Book
 
 
-@Database(entities = [Book::class], version = 10, exportSchema = false)
+@Database(entities = [Book::class], version = 11, exportSchema = false)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
 }

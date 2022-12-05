@@ -94,65 +94,48 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
                     .background(background),
             ) {
                 Column {
-                    Row {
                         CustomTextFieldForAddNewBookScreen(
                             descriptionText = "Tytuł",
                             onTextChange = {title = it},
                             textFieldValue = title
                         )
 
-                    }
-
-                    Row {
                         CustomTextFieldForAddNewBookScreen(
                             descriptionText = "Autor / Autorzy",
                             onTextChange = {author = it},
                             textFieldValue = author
                         )
 
-                    }
-                    Row {
                        CustomTextFieldForAddNewBookScreen(
                            descriptionText = "Data wydania (rrrr-mm-dd)",
                            onTextChange = {publicationDate = it} ,
                            textFieldValue = publicationDate
                        )
 
-                    }
-                    Row {
                         CustomTextFieldForAddNewBookScreen(
                             descriptionText = "Liczba stron",
                             onTextChange = {pages = it} ,
                             textFieldValue = pages
                         )
 
-                    }
-                    Row {
                        CustomTextFieldForAddNewBookScreen(
                            descriptionText = "Kategorie",
                            onTextChange = {categories = it},
                            textFieldValue = categories
                        )
 
-                    }
-                    Row {
                         CustomTextFieldForAddNewBookScreen(
                             descriptionText = "ISBN",
                             onTextChange = {isbn = it},
                             textFieldValue = isbn
                         )
-                    }
-                    Row {
+
                         CustomTextFieldForAddNewBookScreen(
                             descriptionText = "Opis",
                             onTextChange = {description = it},
                             textFieldValue = description,
                             fontWeight = FontWeight.Thin
                         )
-
-                    }
-
-
                 }
 
 
@@ -197,41 +180,29 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
                         .background(background),
                 ) {
                     Column {
-                        Row {
                             CustomTextFieldForAddNewBookScreen(
                                 descriptionText = "Wydawca",
                                 onTextChange = {publisher = it},
                                 textFieldValue = publisher
                             )
 
-                        }
-
-                        Row {
                             CustomTextFieldForAddNewBookScreen(
                                 descriptionText =  "Język",
                                 onTextChange = {language = it},
                                 textFieldValue = language
                             )
 
-                        }
-                        Row {
                             CustomTextFieldForAddNewBookScreen(
                                 descriptionText = "Edycja/Wydanie",
                                 onTextChange = {edition = it},
                                 textFieldValue = edition
                             )
 
-                        }
-                        Row {
                             CustomTextFieldForAddNewBookScreen(
                                 descriptionText =  "Podtytuł",
                                 onTextChange = {subtitle = it},
                                 textFieldValue = subtitle
                             )
-
-                        }
-
-
                     }
 
 
@@ -253,7 +224,7 @@ fun AddNewBookScreen(navController : NavHostController,bookAsJson : String? = ""
 
 
 
-        
+
         Row(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -420,8 +391,7 @@ fun defineWhatIsImageSourceAndPrepareForSendingByNavigationAndReturnCorrectUri(i
     Log.d("TEST", "TEST: $imageUri")
     val uniqueKeyPositionInImageUriPath = 1
     //Get only unique value from uri and insert to database(not able to send full uri for navigation)
-
-    val uniqueImageUriKey = if(imageUri.toString() != "")
+    val uniqueImageUriKey = if(imageUri.toString() != "" && imageUri.toString().contains("/image"))
             (imageUri.toString().split("/image")).get(uniqueKeyPositionInImageUriPath)
         else
             ""
