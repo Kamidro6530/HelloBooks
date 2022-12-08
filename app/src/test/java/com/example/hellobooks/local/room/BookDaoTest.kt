@@ -17,7 +17,7 @@ import org.robolectric.RobolectricTestRunner
 
 @SmallTest
 @RunWith(RobolectricTestRunner::class)
-class BookDaoTest {
+internal class BookDaoTest {
 
    private lateinit var  database : BookDatabase
    lateinit var dao : BookDao
@@ -58,7 +58,7 @@ class BookDaoTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun getAllBooksFromDatabase() = runTest() {
+     fun getAllBooksFromDatabase() = runTest() {
         //given
         dao.insertBookToDatabase(Book(id= 1,title = "Test1", pages = 100))
         dao.insertBookToDatabase(Book(id= 2,title = "Test2", pages = 200))
