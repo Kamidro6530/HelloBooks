@@ -2,6 +2,7 @@ package com.example.hellobooks.converters
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.room.TypeConverter
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.remote.dto.VolumeInfo
@@ -11,13 +12,54 @@ import java.io.ByteArrayOutputStream
 
 class Converters {
 
+
+    private val pairsIllegalAndCorrectCharacters : HashMap<Char,Char> = hashMapOf(
+        '#' to 'µ',
+        '%' to 'Ω',
+        '&' to '∆',
+        '{' to '—',
+        '}' to '–',
+        '<' to '‡',
+        '>' to '†',
+        '*' to '≥',
+        '?' to '≤',
+        '/' to '÷',
+        ' ' to '‰',
+        '$' to '¶',
+        '!' to '√',
+        "'".first() to '∏',
+        ':' to '∑',
+        '@' to '≈',
+        '+' to '≠',
+        '`' to '±',
+        '|' to 'º',
+        '=' to '•',
+    )
+
+   private fun String.encodeIllegalCharacters() : String {
+        var string = this
+        pairsIllegalAndCorrectCharacters.forEach {
+           string =  string.replace(it.key, it.value)
+        }
+        return string
+    }
+
+
+    private fun String.decodeIllegalCharacters() : String {
+        var string = this
+        pairsIllegalAndCorrectCharacters.forEach{
+            string =  string.replace(it.value,it.key)
+        }
+        return string
+    }
+
+
     fun parseBookIntoJsonToAllowSendAsArgument(book: Book): String? {
         val gson = Gson()
-        //Method toJson have trouble with parse '?' char so I change this char to other
         book.apply {
-            itemIdentifierOnlyForDownloadedBooks = itemIdentifierOnlyForDownloadedBooks?.replace('/', '^')
-            description = description.replace('?', '`')
-            imageUri = imageUri.replace('?', '`').replace('/', '^')
+            itemIdentifierOnlyForDownloadedBooks = itemIdentifierOnlyForDownloadedBooks?.encodeIllegalCharacters()
+            description = description.encodeIllegalCharacters()
+            imageUri = imageUri.encodeIllegalCharacters()
         }
         return gson.toJson(book)
     }
@@ -25,16 +67,16 @@ class Converters {
 
     fun parseJsonArgumentIntoBook(json: String?): Book {
         val gson = Gson()
-        //Method toJson have trouble with parse '?' char so I change this char to other
-        return gson.fromJson(json?.replace('`', '?')?.replace('^', '/'), Book::class.java)
+        return gson.fromJson(json?.decodeIllegalCharacters(), Book::class.java) ?: Book()
+    }
+
+
+    fun encodeUriKey(code: String?): String {
+        return code?.encodeIllegalCharacters() ?: "null"
     }
 
     fun decodeUriKey(code: String): String {
-        return code.replace("+", "%")
-    }
-
-    fun encodeUriKey(code: String?): String {
-        return code?.replace("%", "+") ?: "null"
+        return code.decodeIllegalCharacters()
     }
 
 
