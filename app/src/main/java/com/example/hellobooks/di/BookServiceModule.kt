@@ -12,8 +12,8 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class BookServiceModule {
 
-    @Singleton
-    @Binds
-    abstract fun bindBookService(bookServiceImpl: BookServiceImpl) : BooksService
+   @Singleton
+   @Binds
+   abstract fun bindBookService(bookServiceImpl: BookServiceImpl) : BooksService
 
 }

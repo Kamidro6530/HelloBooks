@@ -6,28 +6,33 @@ import androidx.test.filters.SmallTest
 import app.cash.turbine.test
 import com.example.hellobooks.local.room.book.Book
 import com.google.common.truth.Truth.assertThat
+import dagger.hilt.android.testing.HiltAndroidRule
+import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import javax.inject.Inject
+import javax.inject.Named
 
 @SmallTest
-@RunWith(RobolectricTestRunner::class)
+@HiltAndroidTest
 internal class BookDaoTest {
 
-   private lateinit var  database : BookDatabase
+    @Inject
+    @Named("bookdb-test")
+    lateinit var  database : BookDatabase
    lateinit var dao : BookDao
+
+   @get:Rule
+   var hiltRule = HiltAndroidRule(this)
 
     @Before
     fun setup(){
-        database = Room.inMemoryDatabaseBuilder(
-            ApplicationProvider.getApplicationContext(),
-            BookDatabase::class.java
-        ).allowMainThreadQueries().build()
+        hiltRule.inject()
 
         dao = database.bookDao()
     }
