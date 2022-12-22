@@ -1,7 +1,5 @@
 package com.example.hellobooks.local.room
 
-import androidx.room.Room
-import androidx.test.core.app.ApplicationProvider
 import androidx.test.filters.SmallTest
 import app.cash.turbine.test
 import com.example.hellobooks.local.room.book.Book
@@ -25,6 +23,9 @@ internal class BookDaoTest {
     @Inject
     @Named("bookdb-test")
     lateinit var  database : BookDatabase
+
+    @Inject
+    @Named("bookdao-test")
    lateinit var dao : BookDao
 
    @get:Rule
@@ -33,8 +34,6 @@ internal class BookDaoTest {
     @Before
     fun setup(){
         hiltRule.inject()
-
-        dao = database.bookDao()
     }
 
     @After

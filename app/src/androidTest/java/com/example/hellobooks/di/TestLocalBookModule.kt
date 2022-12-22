@@ -3,6 +3,7 @@ package com.example.hellobooks.di
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.example.hellobooks.local.room.BookDao
 import com.example.hellobooks.local.room.BookDatabase
 import dagger.Module
 import dagger.Provides
@@ -23,4 +24,11 @@ object TestLocalBookModule {
             appContext,
             BookDatabase::class.java
         ).allowMainThreadQueries().build()
+
+    @Provides
+    @Named("bookdao-test")
+    fun provideBookDao(@Named("bookdb-test") database: BookDatabase) : BookDao
+    {
+        return database.bookDao()
+    }
 }
