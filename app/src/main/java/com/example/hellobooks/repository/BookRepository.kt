@@ -11,24 +11,25 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
-
 @Singleton
-class BookRepository @Inject constructor(
+open class BookRepository @Inject constructor(
     private val bookDao: BookDao,
     private val booksService: BooksService
-) {
+) : IBookRepository {
 
-    fun insertBookToDatabase(book: Book) =
+    override fun insertBookToDatabase(book: Book) {
         CoroutineScope(Dispatchers.IO).launch { bookDao.insertBookToDatabase(book) }
+    }
 
 
-    fun deleteBookFromDatabase(book: Book) =
+    override fun deleteBookFromDatabase(book: Book) {
         CoroutineScope(Dispatchers.IO).launch { bookDao.deleteBookFromDatabase(book) }
+    }
 
-    fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooksFromDatabase()
+    override fun getAllBooksFromDatabase(): Flow<List<Book>> = bookDao.getAllBooksFromDatabase()
 
 
-    suspend fun getBookFromBooksService(query_parameter: String): Flow<List<Book>?> {
+    override suspend fun getBookFromBooksService(query_parameter: String): Flow<List<Book>?> {
         return flow {
             val dataToEmit = booksService.getBooksFromBooksService(query_parameter).items?.map {
                 val book = it.volumeInfo
@@ -53,7 +54,9 @@ class BookRepository @Inject constructor(
             emit(dataToEmit)
         }.flowOn(Dispatchers.IO)
     }
-
-
 }
+
+
+
+
 
