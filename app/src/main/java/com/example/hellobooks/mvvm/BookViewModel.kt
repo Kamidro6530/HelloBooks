@@ -1,5 +1,6 @@
 package com.example.hellobooks.mvvm
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -7,13 +8,14 @@ import androidx.lifecycle.viewModelScope
 import com.example.hellobooks.converters.Converters
 import com.example.hellobooks.local.room.book.Book
 import com.example.hellobooks.repository.BookRepository
+import com.example.hellobooks.repository.IBookRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class BookViewModel @Inject constructor(
-    private val bookRepository: BookRepository,
+    private val bookRepository: IBookRepository,
     val converters: Converters
 ) : ViewModel() {
 
@@ -29,14 +31,20 @@ class BookViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            bookRepository.getAllBooksFromDatabase().collect {
-                _listOfBooksForBookshelf.value = it.filter { it.itShouldBeOnWishList == false }
-                _listOfBooksForWishList.value = it.filter { it.itShouldBeOnWishList == true }
-            }
+           getAllBooksFromDatabase()
         }
     }
 
+    private suspend fun getAllBooksFromDatabase(){
+        bookRepository.getAllBooksFromDatabase().collect {
+            println("getAllBooksStart")
+            _listOfBooksForBookshelf.value = it.filter { it.itShouldBeOnWishList == false }
+            _listOfBooksForWishList.value = it.filter { it.itShouldBeOnWishList == true }
+        }
+        println("Viewmodel finish add books to list")
+    }
 
+    // Przebudowac Viewmodel przy uzyciu stateflow
 
     fun insertBookToDatabase(book: Book) {
         viewModelScope.launch { bookRepository.insertBookToDatabase(book) }
@@ -57,5 +65,10 @@ class BookViewModel @Inject constructor(
 
     }
 
+    sealed interface BookViewModelUiState {
+        data class Success(val data : List<Book>) : BookViewModelUiState
+        object Loading : BookViewModelUiState
+        data class Error(val message : String) : BookViewModelUiState
+    }
 
 }
