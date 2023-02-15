@@ -16,12 +16,13 @@ import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
 import com.example.hellobooks.screens.wish_list.EmptyWishListItem
+import com.example.hellobooks.screens.wish_list.WishListViewModel
 import com.example.hellobooks.ui.theme.background
 
 @Composable
 fun WishListScreen(navController: NavHostController) {
-    val bookViewModel = hiltViewModel<BookViewModel>()
-    val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
+    val wishListViewModel = hiltViewModel<WishListViewModel>()
+    val wishListOfBooks = wishListViewModel.listOfBooksForWishList.value
 
     LazyColumn(
         state = rememberLazyListState(),
@@ -39,7 +40,7 @@ fun WishListScreen(navController: NavHostController) {
                         .clickable(onClick = {
                             navController.navigate(
                                 Routes.BookInformationScreen.withArgsAndScreenTypeForBookInformationScreen(
-                                    bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(
+                                    wishListViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(
                                         book
                                     ),
                                     Routes.WishListScreen.route,
@@ -49,7 +50,7 @@ fun WishListScreen(navController: NavHostController) {
                         })
                 ) {
                     BookShelfListItem(
-                        jsonBook = bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(
+                        jsonBook = wishListViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(
                             book
                         )
                     )
