@@ -26,6 +26,14 @@ class WishListViewModel @Inject constructor(
         }
     }
 
+    fun insertBookToDatabase(book: Book) =
+        viewModelScope.launch { bookRepository.insertBookToDatabase(book) }
+
+
+    fun deleteBookFromDatabase(book: Book) =
+        viewModelScope.launch { bookRepository.deleteBookFromDatabase(book) }
+
+
     private suspend fun getAllBooksFromDatabase(){
         bookRepository.getAllBooksFromDatabase().collect {
             _listOfBooksForWishList.value = it.filter { it.itShouldBeOnWishList == true }

@@ -27,6 +27,7 @@ import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.ItemContent
+import com.example.hellobooks.screens.find_book_screen.FindBookViewModel
 import com.example.hellobooks.ui.theme.background
 import com.example.hellobooks.ui.theme.primary
 import kotlinx.coroutines.CoroutineScope
@@ -36,18 +37,18 @@ import kotlinx.coroutines.launch
 @ExperimentalComposeUiApi
 @Composable
 fun FindBookScreen(navController: NavHostController) {
-    val bookViewModel = hiltViewModel<BookViewModel>()
+    val findBookViewModel = hiltViewModel<FindBookViewModel>()
 
     Column() {
-        SearchBar(bookViewModel = bookViewModel)
-        ShowResults(bookViewModel = bookViewModel, navController)
+        SearchBar(findBookViewModel = findBookViewModel)
+        ShowResults(findBookViewModel = findBookViewModel, navController)
     }
 
 }
 
 @Composable
-fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) {
-    val books = bookViewModel.searchBarResultsList.value
+fun ShowResults(findBookViewModel: FindBookViewModel, navController: NavHostController) {
+    val books = findBookViewModel.searchBarResultsList.value
 
     LazyColumn(
         state = rememberLazyListState(),
@@ -59,7 +60,7 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
             Row(Modifier.clickable {
                 navController.navigate(
                     Routes.BookInformationScreen.withArgsAndScreenTypeForBookInformationScreen(
-                        bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
+                        findBookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
                         Routes.FindBookScreen.route,
                         screenType = ScreenType.Information
                     )
@@ -77,7 +78,7 @@ fun ShowResults(bookViewModel: BookViewModel, navController: NavHostController) 
 @ExperimentalComposeUiApi
 @Composable
 fun SearchBar(
-    placeholderText: String = "", bookViewModel: BookViewModel
+    placeholderText: String = "", findBookViewModel: FindBookViewModel
 ) {
     var showClearButton by remember { mutableStateOf(false) }
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -101,7 +102,7 @@ fun SearchBar(
                 },
             value = searchText,
             onValueChange = {
-                CoroutineScope(Dispatchers.IO).launch { bookViewModel.getBookFromBookService(it) }
+                CoroutineScope(Dispatchers.IO).launch { findBookViewModel.getBookFromBookService(it) }
                 searchText = it
             },
             placeholder = {

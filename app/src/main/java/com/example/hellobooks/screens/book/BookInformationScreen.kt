@@ -29,6 +29,7 @@ import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_in
 import com.example.hellobooks.screens.book.screen_types.BookDetailsScreen
 import com.example.hellobooks.screens.book.screen_types.ManageBookInformationScreen
 import com.example.hellobooks.screens.book.screen_types.StatsBookInformationScreen
+import com.example.hellobooks.screens.wish_list.WishListViewModel
 import com.example.hellobooks.ui.theme.*
 import java.lang.Exception
 
@@ -164,9 +165,9 @@ fun MainInformationCard(book: Book) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?, navController: NavHostController, route: String?) {
-    val bookViewModel = hiltViewModel<BookViewModel>()
-    val book = bookViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
-    val wishListOfBooks = bookViewModel.listOfBooksForWishList.value
+    val wishListViewModel = hiltViewModel<WishListViewModel>()
+    val book = wishListViewModel.converters.parseJsonArgumentIntoBook(jsonBook)
+    val wishListOfBooks = wishListViewModel.listOfBooksForWishList.value
 
     if (route != Routes.BookShelfScreen.route) {
         Column {
@@ -187,10 +188,10 @@ fun ShowButtonsIfUserComingFromOtherScreenThanBookShelfScreen(jsonBook: String?,
                 when(wishListOfBooks.any{wishListBook -> wishListBook.itemIdentifierOnlyForDownloadedBooks == book.itemIdentifierOnlyForDownloadedBooks}){
                     true -> {
                         wishListOfBooks.find { it.itemIdentifierOnlyForDownloadedBooks == book.itemIdentifierOnlyForDownloadedBooks }
-                            ?.let { bookViewModel.deleteBookFromDatabase(it) }
+                            ?.let { wishListViewModel.deleteBookFromDatabase(it) }
                     }
                     false -> {
-                        bookViewModel.insertBookToDatabase(
+                        wishListViewModel.insertBookToDatabase(
                             Book(
                                 0,
                                 book.title,
