@@ -14,12 +14,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hellobooks.R
+import com.example.hellobooks.screens.bookshelf.BookShelfViewModelUiState
 import com.example.hellobooks.ui.theme.darkgreybackground
 import com.example.hellobooks.ui.theme.primary
 import com.example.hellobooks.ui.theme.roboto_fonts
 
 @Composable
-fun EmptyListBookShelfItem() {
+fun ErrorOrEmptyListBookShelfItem(uiState : BookShelfViewModelUiState) {
     Box(
         Modifier
             .padding(vertical = 180.dp, horizontal = 10.dp)
@@ -51,9 +52,14 @@ fun EmptyListBookShelfItem() {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
+                val statementText = when(uiState){
+                    is BookShelfViewModelUiState.Success -> "O nie, na twojej półce nie ma żadnych książek ..."
+                    is BookShelfViewModelUiState.Error -> "${uiState.message}"
+                    is BookShelfViewModelUiState.Loading -> "O nie, na twojej półce nie ma żadnych książek ..."
 
+                }
                 Text(
-                    "O nie, na twojej półce nie ma żadnych książek ...",
+                    statementText,
                     Modifier.padding(15.dp),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
