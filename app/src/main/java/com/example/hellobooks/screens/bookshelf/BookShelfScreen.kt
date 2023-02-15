@@ -16,14 +16,15 @@ import com.example.hellobooks.mvvm.BookViewModel
 import com.example.hellobooks.navigation.Routes
 import com.example.hellobooks.navigation.navigation_routes_items.top_bar_book_information_screen.ScreenType
 import com.example.hellobooks.screens.bookshelf.BookShelfListItem
+import com.example.hellobooks.screens.bookshelf.BookShelfViewModel
 import com.example.hellobooks.screens.bookshelf.bookshelf_items.EmptyListBookShelfItem
 import com.example.hellobooks.ui.theme.background
 
 @Composable
 fun BookShelfScreen(navController: NavHostController) {
 
-    val bookViewModel = hiltViewModel<BookViewModel>()
-    val listOfBooks = bookViewModel.listOfBooksForBookshelf.value
+    val bookShelfViewModel = hiltViewModel<BookShelfViewModel>()
+    val listOfBooks = bookShelfViewModel.listOfBooksForBookshelf.value
     LazyColumn(
         state = rememberLazyListState(),
         modifier = Modifier.fillMaxSize()
@@ -40,14 +41,14 @@ fun BookShelfScreen(navController: NavHostController) {
                         .clickable(onClick = {
                             navController.navigate(
                                 Routes.BookInformationScreen.withArgsAndScreenTypeForBookInformationScreen(
-                                    bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
+                                    bookShelfViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book),
                                     Routes.BookShelfScreen.route,
                                     screenType = ScreenType.Information
                                 ),
                             )
                         })
                 ) {
-                    BookShelfListItem(jsonBook = bookViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book))
+                    BookShelfListItem(jsonBook = bookShelfViewModel.converters.parseBookIntoJsonToAllowSendAsArgument(book))
                 }
                 Row() {
 
